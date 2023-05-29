@@ -113,7 +113,19 @@ while True:
     unique["right"] = False
     unique["left"] = False
     os.system('cls')
-    print(global_x, global_y)
+    # print(global_x, global_y)
+    
+    for i in range(8):
+        for j in range(7):
+            if global_x == j and global_y == 8-i:
+                print("■", end="")
+            else:    
+                print("□", end="")
+        if global_x == 7 and global_y == 8-i:
+            print("■")
+        else:
+            print("□")
+    
     time.sleep(0.05)
     
 
