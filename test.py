@@ -11,10 +11,17 @@ button["down"] = False
 button["right"] = False
 button["left"] = False
 
+unique = {}
+unique["q"] = False
+unique["up"] = False
+unique["down"] = False
+unique["right"] = False
+unique["left"] = False
+
 global_x = 0
 global_y = 0
 
-# sample1.py
+# マウス系フラグ制御
 def move(x, y):
     print('マウスポインターは {0} へ移動しました'.format((x, y)))
 
@@ -34,36 +41,48 @@ mouse_listener = mouse.Listener(
     on_scroll=scroll)
 #mouse_listener.start()
 
-# sample2.py
+# キーボード系フラグ制御
 def press(key):
     global global_x
     global global_y
     global button
+    global unique
     try:
         #print('アルファベット {0} が押されました'.format(key.char))
         if "{0}".format(key.char) == "a":
-            global_x += 1
-        print(global_x, global_y)
+            if not button["a"]:
+                unique["a"] = True
+            button["a"] = True
     except AttributeError:
         if "{0}".format(key) == "Key.up":
+            if not button["up"]:
+                unique["up"] = True
             button["up"] = True
         if "{0}".format(key) == "Key.down":
+            if not button["down"]:
+                unique["down"] = True
             button["down"] = True
         if "{0}".format(key) == "Key.right":
+            if not button["right"]:
+                unique["right"] = True
             button["right"] = True
         if "{0}".format(key) == "Key.left":
+            if not button["left"]:
+                unique["left"] = True
             button["left"] = True
 
 def release(key):
     # print('{0} が離されました'.format(key))
     # if key == keyboard.Key.esc:     # escが押された場合
     #     return False    # listenerを止める
+    global global_x
+    global global_y
     global button
+    global unique
     try:
         #print('アルファベット {0} が押されました'.format(key.char))
         if "{0}".format(key.char) == "a":
-            global_x += 1
-        print(global_x, global_y)
+            button["a"] = False
     except AttributeError:
         if "{0}".format(key) == "Key.up":
             button["up"] = False
@@ -74,21 +93,25 @@ def release(key):
         if "{0}".format(key) == "Key.left":
             button["left"] = False
 
-
 listener = keyboard.Listener(
     on_press=press,
     on_release=release)
 listener.start()
 
+#処理
 while True:
-    if button["up"]:
+    if unique["up"]:
         global_y += 1
-    elif button["down"]:
+    elif unique["down"]:
         global_y -= 1
-    elif button["right"]:
+    elif unique["right"]:
         global_x += 1
-    elif button["left"]:
+    elif unique["left"]:
         global_x -= 1
+    unique["up"] = False
+    unique["down"] = False
+    unique["right"] = False
+    unique["left"] = False
     os.system('cls')
     print(global_x, global_y)
     time.sleep(0.05)
