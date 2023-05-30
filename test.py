@@ -115,6 +115,7 @@ while True:
     os.system('cls')
     # print(global_x, global_y)
     
+    #ステージ描画
     for i in range(8):
         for j in range(7):
             if global_x == j and global_y == 7-i:
@@ -130,35 +131,5 @@ while True:
     
 
 os.system('cls')
-
-# time.sleep(1)
-
-# os.system('cls')
-# print("□■□□")
-# print("□□□□")
-# print("□□□□")
-# print("□□□□")
-# time.sleep(1)
-
-# os.system('cls')
-# print("□□□□")
-# print("□■□□")
-# print("□□□□")
-# print("□□□□")
-# time.sleep(1)
-
-# os.system('cls')
-# print("□□□□")
-# print("□□□□")
-# print("□■□□")
-# print("□□□□")
-# time.sleep(1)
-
-# os.system('cls')
-# print("□□□□")
-# print("□□□□")
-# print("□□□□")
-# print("□■□□")
-# time.sleep(1)
 
 # os.system('cls')
