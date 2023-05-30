@@ -22,8 +22,8 @@ loop = True
 
 player = "◆"
 
-stage_w = 8
-stage_h = 8
+stage_w = 24
+stage_h = 12
 
 player_x = 0
 player_y = 0
@@ -147,7 +147,7 @@ while loop:
     #ステージ描画
     for i in range(stage_h):
         for j in range(stage_w):
-            if player_x == j and player_y == (stage_w-1)-i:
+            if player_x == j and player_y == (stage_h-1)-i:
                 print(player, end="")
             else:    
                 print("□", end="")
