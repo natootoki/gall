@@ -22,14 +22,11 @@ loop = True
 
 player = "◆"
 
-global_x = 0
-global_y = 0
+stage_w = 8
+stage_h = 8
 
-x_min = 0
-x_max = 7
-
-y_min = 0
-y_max = 7
+player_x = 0
+player_y = 0
 
 # マウス系フラグ制御
 def move(x, y):
@@ -53,8 +50,8 @@ mouse_listener = mouse.Listener(
 
 # キーボード系フラグ制御
 def press(key):
-    global global_x
-    global global_y
+    global player_x
+    global player_y
     global button
     global unique
     try:
@@ -85,8 +82,8 @@ def release(key):
     # print('{0} が離されました'.format(key))
     # if key == keyboard.Key.esc:     # escが押された場合
     #     return False    # listenerを止める
-    global global_x
-    global global_y
+    global player_x
+    global player_y
     global button
     global unique
     try:
@@ -108,18 +105,24 @@ listener = keyboard.Listener(
     on_release=release)
 listener.start()
 
-#処理
-#1push1処理
+################################処理################################
+
 while loop:
+
+    #1push1処理
     if unique["up"]:
-        global_y += 1
-    elif unique["down"]:
-        global_y -= 1
-    elif unique["right"]:
-        global_x += 1
-    elif unique["left"]:
-        global_x -= 1
-    elif unique["q"]:
+        player_y += 1
+
+    if unique["down"]:
+        player_y -= 1
+
+    if unique["right"]:
+        player_x += 1
+
+    if unique["left"]:
+        player_x -= 1
+
+    if unique["q"]:
         loop = False
 
     unique["up"] = False
@@ -128,29 +131,27 @@ while loop:
     unique["left"] = False
     unique["q"] = False
 
-    if global_x < x_min:
-        global_x = x_min
-    elif global_x > x_max:
-        global_x = x_max
+    if player_x < 0:
+        player_x = 0
+    elif player_x > stage_w-1:
+        player_x = stage_w-1
 
-    if global_y < y_min:
-        global_y = y_min
-    elif global_y > y_max:
-        global_y = y_max
+    if player_y < 0:
+        player_y = 0
+    elif player_y > stage_h-1:
+        player_y = stage_h-1
+
     os.system('cls')
-    # print(global_x, global_y)
+    # print(player_x, player_y)
     
     #ステージ描画
-    for i in range(8):
-        for j in range(7):
-            if global_x == j and global_y == 7-i:
+    for i in range(stage_h):
+        for j in range(stage_w):
+            if player_x == j and player_y == (stage_w-1)-i:
                 print(player, end="")
             else:    
                 print("□", end="")
-        if global_x == 7 and global_y == 7-i:
-            print(player)
-        else:
-            print("□")
+        print("")
     
     time.sleep(0.05)
     
