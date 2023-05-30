@@ -18,8 +18,16 @@ unique["down"] = False
 unique["right"] = False
 unique["left"] = False
 
+loop = True
+
 global_x = 0
 global_y = 0
+
+x_min = 0
+x_max = 7
+
+y_min = 0
+y_max = 7
 
 # マウス系フラグ制御
 def move(x, y):
@@ -49,10 +57,10 @@ def press(key):
     global unique
     try:
         #print('アルファベット {0} が押されました'.format(key.char))
-        if "{0}".format(key.char) == "a":
-            if not button["a"]:
-                unique["a"] = True
-            button["a"] = True
+        if "{0}".format(key.char) == "q":
+            if not button["q"]:
+                unique["q"] = True
+            button["q"] = True
     except AttributeError:
         if "{0}".format(key) == "Key.up":
             if not button["up"]:
@@ -99,7 +107,8 @@ listener = keyboard.Listener(
 listener.start()
 
 #処理
-while True:
+#1push1処理
+while loop:
     if unique["up"]:
         global_y += 1
     elif unique["down"]:
@@ -108,10 +117,24 @@ while True:
         global_x += 1
     elif unique["left"]:
         global_x -= 1
+    elif unique["q"]:
+        loop = False
+
     unique["up"] = False
     unique["down"] = False
     unique["right"] = False
     unique["left"] = False
+    unique["q"] = False
+
+    if global_x < x_min:
+        global_x = x_min
+    elif global_x > x_max:
+        global_x = x_max
+
+    if global_y < y_min:
+        global_y = y_min
+    elif global_y > y_max:
+        global_y = y_max
     os.system('cls')
     # print(global_x, global_y)
     
