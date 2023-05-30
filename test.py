@@ -20,6 +20,8 @@ unique["left"] = False
 
 loop = True
 
+player = "◆"
+
 global_x = 0
 global_y = 0
 
@@ -142,11 +144,11 @@ while loop:
     for i in range(8):
         for j in range(7):
             if global_x == j and global_y == 7-i:
-                print("■", end="")
+                print(player, end="")
             else:    
                 print("□", end="")
         if global_x == 7 and global_y == 7-i:
-            print("■")
+            print(player)
         else:
             print("□")
     
