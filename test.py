@@ -28,6 +28,11 @@ stage_h = 12
 player_x = 0
 player_y = 0
 
+goal = "★"
+
+goal_x = stage_w-1
+goal_y = stage_h-1
+
 # マウス系フラグ制御
 def move(x, y):
     print('マウスポインターは {0} へ移動しました'.format((x, y)))
@@ -149,12 +154,16 @@ while loop:
         for j in range(stage_w):
             if player_x == j and player_y == (stage_h-1)-i:
                 print(player, end="")
+            elif goal_x == j and goal_y == (stage_h-1)-i:
+                print(goal, end="")
             else:    
                 print("□", end="")
         print("")
     
     time.sleep(0.05)
-    
+
+    if player_x == goal_x and player_y == goal_y:
+        loop = False
 
 os.system('cls')
 
