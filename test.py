@@ -38,7 +38,7 @@ goal_y = random.randrange(stage_h)
 is_goal = False
 
 wall = "■"
-wall_num = 3
+wall_num = max(1, (stage_w-2)*(stage_h-2))
 
 wall_list = []
 for i in range(wall_num):
