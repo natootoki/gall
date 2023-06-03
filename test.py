@@ -126,16 +126,16 @@ listener.start()
 while loop:
 
     #1push1処理
-    if unique["up"]:
+    if unique["up"] and not [player_x, player_y+1] in wall_list:
         player_y += 1
 
-    if unique["down"]:
+    if unique["down"] and not [player_x, player_y-1] in wall_list:
         player_y -= 1
 
-    if unique["right"]:
+    if unique["right"] and not [player_x+1, player_y] in wall_list:
         player_x += 1
 
-    if unique["left"]:
+    if unique["left"] and not [player_x-1, player_y] in wall_list:
         player_x -= 1
 
     if unique["q"]:
@@ -147,11 +147,13 @@ while loop:
     unique["left"] = False
     unique["q"] = False
 
+    #端っこ判定x
     if player_x < 0:
         player_x = 0
     elif player_x > stage_w-1:
         player_x = stage_w-1
 
+    #端っこ判定y
     if player_y < 0:
         player_y = 0
     elif player_y > stage_h-1:
@@ -167,12 +169,14 @@ while loop:
                 print(player, end="")
             elif goal_x == j and goal_y == (stage_h-1)-i:
                 print(goal, end="")
-            elif [i, j] in wall_list:
+            elif [j, (stage_h-1)-i] in wall_list:
                 print(wall, end="")
             else:    
                 print("□", end="")
         print("")
-    
+    if [player_x, player_y] in wall_list:
+        print("wall!!!!")
+
     time.sleep(0.05)
 
     if player_x == goal_x and player_y == goal_y:
