@@ -37,6 +37,13 @@ goal_y = random.randrange(stage_h)
 
 is_goal = False
 
+wall = "■"
+wall_num = 3
+
+wall_list = []
+for i in range(wall_num):
+    wall_list.append([random.randrange(stage_w), random.randrange(stage_h)])
+
 # マウス系フラグ制御
 def move(x, y):
     print('マウスポインターは {0} へ移動しました'.format((x, y)))
@@ -160,6 +167,8 @@ while loop:
                 print(player, end="")
             elif goal_x == j and goal_y == (stage_h-1)-i:
                 print(goal, end="")
+            elif [i, j] in wall_list:
+                print(wall, end="")
             else:    
                 print("□", end="")
         print("")
