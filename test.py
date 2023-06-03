@@ -174,8 +174,6 @@ while loop:
             else:    
                 print("□", end="")
         print("")
-    if [player_x, player_y] in wall_list:
-        print("wall!!!!")
 
     time.sleep(0.05)
 
