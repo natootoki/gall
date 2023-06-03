@@ -22,8 +22,8 @@ unique["left"] = False
 
 loop = True
 
-stage_w = 1#random.randrange(1)
-stage_h = 1#random.randrange(1)
+stage_w = random.randrange(2,24)
+stage_h = random.randrange(2,12)
 
 player = "◆"
 
