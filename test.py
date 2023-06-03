@@ -22,8 +22,8 @@ unique["left"] = False
 
 loop = True
 
-stage_w = random.randrange(2,24)
-stage_h = random.randrange(2,12)
+stage_w = random.randrange(2,24) #2以上じゃないとスタートの瞬間にゴール
+stage_h = random.randrange(2,12) #2以上じゃないとスタートの瞬間にゴール
 
 player = "◆"
 
