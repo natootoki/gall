@@ -24,6 +24,8 @@ loop = True
 
 stage_w = random.randrange(2,24) #2以上じゃないとスタートの瞬間にゴール
 stage_h = random.randrange(2,12) #2以上じゃないとスタートの瞬間にゴール
+print("stage_w", stage_w)
+print("stage_h", stage_h)
 
 player = "◆"
 
@@ -32,17 +34,62 @@ player_y = 0
 
 goal = "★"
 
-goal_x = random.randrange(stage_w)
-goal_y = random.randrange(stage_h)
+#goal_x = random.randrange(stage_w)
+#goal_y = random.randrange(stage_h)
+
+goal_x = stage_w-1
+goal_y = stage_h-1
+
 
 is_goal = False
 
 wall = "■"
-wall_num = max(1, (stage_w-2)*(stage_h-2))
+wall_num = max(1, stage_w * stage_h - (abs(goal_x-player_x) + abs(goal_y-player_y)) * 3)
 
-wall_list = []
-for i in range(wall_num):
-    wall_list.append([random.randrange(stage_w), random.randrange(stage_h)])
+test = True
+while test:
+
+    wall_list = []
+    for i in range(wall_num):
+        while True:
+            temp_wall_x = random.randrange(stage_w)
+            temp_wall_y = random.randrange(stage_h)
+            if not [temp_wall_x, temp_wall_y] in wall_list and not [temp_wall_x, temp_wall_y] == [player_x, player_y] and not [temp_wall_x, temp_wall_y] == [goal_x, goal_y]:
+                wall_list.append([temp_wall_x, temp_wall_y])
+                break
+
+    can_reach = [[0] * stage_w for i in range(stage_h)]
+    can_reach[player_x][player_y] = 1
+
+    print(can_reach)
+
+    change = True
+
+    while change:
+        # time.sleep(0.5)
+        change=False
+        for i in range(stage_h):
+            for j in range(stage_w):
+                if can_reach[(stage_h-1)-i][j] == 1:
+                    #print(j, (stage_h-1)-i)
+                    if not (stage_h-1)-i == stage_h-1:
+                        if not [j, ((stage_h-1)-i)+1] in wall_list and not can_reach[((stage_h-1)-i)+1][j] == 1:
+                            can_reach[((stage_h-1)-i)+1][j] = 1
+                            change = True
+                    if not (stage_h-1)-i == 0:
+                        if not [j, ((stage_h-1)-i)-1] in wall_list and not can_reach[((stage_h-1)-i)-1][j] == 1:
+                            can_reach[((stage_h-1)-i)-1][j] = 1
+                            change = True
+                    if not j == stage_w-1:
+                        if not [j+1, (stage_h-1)-i] in wall_list and not can_reach[(stage_h-1)-i][j+1] == 1:
+                            can_reach[(stage_h-1)-i][j+1] = 1
+                            change = True
+                    if not j == 0:
+                        if not [j-1, (stage_h-1)-i] in wall_list and not can_reach[(stage_h-1)-i][j-1] == 1:
+                            can_reach[(stage_h-1)-i][j-1]= 1
+                            change = True
+    if can_reach[goal_y][goal_x] == 1:
+        test = False
 
 # マウス系フラグ制御
 def move(x, y):
@@ -188,5 +235,10 @@ if is_goal:
     time.sleep(3)
 
 os.system('cls')
+
+for i in range(stage_h):
+    for j in range(stage_w): 
+        print(can_reach[(stage_h-1)-i][j], end="")
+    print("")
 
 # os.system('cls')
