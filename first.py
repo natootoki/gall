@@ -1,3 +1,8 @@
+import random
+
+#変数管理台帳
+#hoge：テキトーな数字
+
 #print
 print("Hello, world!")
 
@@ -21,3 +26,6 @@ print(5/2)
 print(33%7)
 print(7//2)
 print(7**2)
+
+#ランダム
+print(random.randrange(10))

@@ -1,6 +1,8 @@
 import os
 import time
 import keyboard
+import random
+
 import pynput
 from pynput import mouse, keyboard
 
@@ -20,18 +22,20 @@ unique["left"] = False
 
 loop = True
 
-player = "◆"
+stage_w = 1#random.randrange(1)
+stage_h = 1#random.randrange(1)
 
-stage_w = 24
-stage_h = 12
+player = "◆"
 
 player_x = 0
 player_y = 0
 
 goal = "★"
 
-goal_x = stage_w-1
-goal_y = stage_h-1
+goal_x = random.randrange(stage_w)
+goal_y = random.randrange(stage_h)
+
+is_goal = False
 
 # マウス系フラグ制御
 def move(x, y):
@@ -164,6 +168,13 @@ while loop:
 
     if player_x == goal_x and player_y == goal_y:
         loop = False
+        is_goal = True
+
+os.system('cls')
+
+if is_goal:
+    print("goal!!!!")
+    time.sleep(3)
 
 os.system('cls')
 
