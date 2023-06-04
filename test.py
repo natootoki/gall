@@ -71,30 +71,30 @@ while test:
         change=False
         for i in range(stage_h):
             for j in range(stage_w):
-                if can_reach[(stage_h-1)-i][j] == 1:
+                if can_reach[(stage_h-1)-i][j] >= 1:
                     #print(j, (stage_h-1)-i)
                     if not (stage_h-1)-i == stage_h-1:
-                        if not [j, ((stage_h-1)-i)+1] in wall_list and not can_reach[((stage_h-1)-i)+1][j] == 1:
-                            can_reach[((stage_h-1)-i)+1][j] = 1
+                        if not [j, ((stage_h-1)-i)+1] in wall_list and can_reach[((stage_h-1)-i)+1][j] == 0:
+                            can_reach[((stage_h-1)-i)+1][j] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
                     if not (stage_h-1)-i == 0:
-                        if not [j, ((stage_h-1)-i)-1] in wall_list and not can_reach[((stage_h-1)-i)-1][j] == 1:
-                            can_reach[((stage_h-1)-i)-1][j] = 1
+                        if not [j, ((stage_h-1)-i)-1] in wall_list and can_reach[((stage_h-1)-i)-1][j] == 0:
+                            can_reach[((stage_h-1)-i)-1][j] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
                     if not j == stage_w-1:
-                        if not [j+1, (stage_h-1)-i] in wall_list and not can_reach[(stage_h-1)-i][j+1] == 1:
-                            can_reach[(stage_h-1)-i][j+1] = 1
+                        if not [j+1, (stage_h-1)-i] in wall_list and can_reach[(stage_h-1)-i][j+1] == 0:
+                            can_reach[(stage_h-1)-i][j+1] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
                     if not j == 0:
-                        if not [j-1, (stage_h-1)-i] in wall_list and not can_reach[(stage_h-1)-i][j-1] == 1:
-                            can_reach[(stage_h-1)-i][j-1]= 1
+                        if not [j-1, (stage_h-1)-i] in wall_list and can_reach[(stage_h-1)-i][j-1] == 0:
+                            can_reach[(stage_h-1)-i][j-1] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
     # if can_reach[goal_y][goal_x] == 1:
-    if can_reach[goal_y][goal_x] == 1 and can_reach[0][goal_x] == 1 and can_reach[goal_y][0] == 1:
+    if can_reach[goal_y][goal_x] >= 1 and can_reach[0][goal_x] >= 1 and can_reach[goal_y][0] >= 1 and can_reach[goal_y][goal_x] >= (stage_w + stage_h) * 1.3:
         test = False
     else:
         test_num += 1
-        print(stage_w, stage_h, stage_w * stage_h, wall_num, test_num)
+        print(stage_w, stage_h, stage_w * stage_h, wall_num, can_reach[goal_y][goal_x], test_num)
 
 #到達可能域だけ見たい場合にはコメント解除する
 # loop = False
@@ -230,6 +230,8 @@ while loop:
                 print("□", end="")
         print("")
     
+    print(can_reach[goal_y][goal_x], stage_w, stage_h)
+
     time.sleep(0.05)
 
     if player_x == goal_x and player_y == goal_y:
