@@ -50,7 +50,7 @@ goal_y = stage_h-1
 is_goal = False
 
 wall = "■"
-wall_num = max(1, stage_w * stage_h * 4 // 9 )
+wall_num = max(1, stage_w * stage_h // 3 )
 
 test = True
 test_num = 0
@@ -103,6 +103,43 @@ while test:
         test_num += 1
         if can_reach[goal_y][goal_x] >= 1:
             print(stage_w, stage_h, stage_w * stage_h, wall_num, can_reach[goal_y][goal_x], test_num)
+
+wall_list = []
+for i in range(stage_h):
+    for j in range(stage_w):
+        wall_list.append([j, i])
+
+inner_x = goal_x
+inner_y = goal_y
+print("remove", inner_x, inner_y)
+wall_list.remove([inner_x, inner_y])
+
+for i in range(can_reach[goal_y][goal_x]):
+    if not inner_y == stage_h-1:
+        if can_reach[inner_y+1][inner_x] == can_reach[goal_y][goal_x]-i:
+            inner_y += 1
+            print("remove", inner_x, inner_y)
+            wall_list.remove([inner_x, inner_y])
+            continue
+    if not inner_y == 0:
+        if can_reach[inner_y-1][inner_x] == can_reach[goal_y][goal_x]-i:
+            inner_y -= 1
+            print("remove", inner_x, inner_y)
+            wall_list.remove([inner_x, inner_y])
+            continue
+    if not inner_x == stage_w-1:
+        if can_reach[inner_y][inner_x+1] == can_reach[goal_y][goal_x]-i:
+            inner_x += 1
+            print("remove", inner_x, inner_y)
+            wall_list.remove([inner_x, inner_y])
+            continue
+    if not inner_x == 0:
+        if can_reach[inner_y][inner_x-1] == can_reach[goal_y][goal_x]-i:
+            inner_x -= 1
+            print("remove", inner_x, inner_y)
+            wall_list.remove([inner_x, inner_y])
+            continue
+
 
 #到達可能域だけ見たい場合にはコメント解除する
 # loop = False
