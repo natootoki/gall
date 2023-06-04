@@ -22,8 +22,8 @@ unique["left"] = False
 
 loop = True
 
-stage_w = random.randrange(2,24) #2以上じゃないとスタートの瞬間にゴール
-stage_h = random.randrange(2,12) #2以上じゃないとスタートの瞬間にゴール
+stage_w = random.randrange(12,72) #小さすぎると壁が少なすぎる
+stage_h = random.randrange(12,36) #小さすぎると壁が少なすぎる
 print("stage_w", stage_w)
 print("stage_h", stage_h)
 
@@ -44,9 +44,10 @@ goal_y = stage_h-1
 is_goal = False
 
 wall = "■"
-wall_num = max(1, stage_w * stage_h - (abs(goal_x-player_x) + abs(goal_y-player_y)) * 3)
+wall_num = max(1, stage_w * stage_h // 3 )
 
 test = True
+test_num = 0
 while test:
 
     wall_list = []
@@ -61,7 +62,7 @@ while test:
     can_reach = [[0] * stage_w for i in range(stage_h)]
     can_reach[player_x][player_y] = 1
 
-    print(can_reach)
+    #print(can_reach)
 
     change = True
 
@@ -88,8 +89,15 @@ while test:
                         if not [j-1, (stage_h-1)-i] in wall_list and not can_reach[(stage_h-1)-i][j-1] == 1:
                             can_reach[(stage_h-1)-i][j-1]= 1
                             change = True
-    if can_reach[goal_y][goal_x] == 1:
+    # if can_reach[goal_y][goal_x] == 1:
+    if can_reach[goal_y][goal_x] == 1 and can_reach[0][goal_x] == 1 and can_reach[goal_y][0] == 1:
         test = False
+    else:
+        test_num += 1
+        print(stage_w, stage_h, stage_w * stage_h, wall_num, test_num)
+
+#到達可能域だけ見たい場合にはコメント解除する
+# loop = False
 
 # マウス系フラグ制御
 def move(x, y):
@@ -221,7 +229,7 @@ while loop:
             else:    
                 print("□", end="")
         print("")
-
+    
     time.sleep(0.05)
 
     if player_x == goal_x and player_y == goal_y:
