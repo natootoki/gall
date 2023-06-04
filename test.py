@@ -22,8 +22,14 @@ unique["left"] = False
 
 loop = True
 
-stage_w = random.randrange(12,72) #小さすぎると壁が少なすぎる
-stage_h = random.randrange(12,36) #小さすぎると壁が少なすぎる
+stage_min_w = 12
+stage_max_w = 48
+stage_min_h = 6
+stage_max_h = 24
+difficulty = 1.5
+
+stage_w = random.randrange(stage_min_w, stage_max_w) #小さすぎると壁が少なすぎる
+stage_h = random.randrange(stage_min_h, stage_max_h) #小さすぎると壁が少なすぎる
 print("stage_w", stage_w)
 print("stage_h", stage_h)
 
@@ -44,7 +50,7 @@ goal_y = stage_h-1
 is_goal = False
 
 wall = "■"
-wall_num = max(1, stage_w * stage_h // 3 )
+wall_num = max(1, stage_w * stage_h * 4 // 9 )
 
 test = True
 test_num = 0
@@ -90,11 +96,13 @@ while test:
                             can_reach[(stage_h-1)-i][j-1] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
     # if can_reach[goal_y][goal_x] == 1:
-    if can_reach[goal_y][goal_x] >= 1 and can_reach[0][goal_x] >= 1 and can_reach[goal_y][0] >= 1 and can_reach[goal_y][goal_x] >= (stage_w + stage_h) * 1.3:
+    # if can_reach[goal_y][goal_x] >= 1 and can_reach[0][goal_x] >= 1 and can_reach[goal_y][0] >= 1 and can_reach[goal_y][goal_x] >= ((stage_w - 1) + (stage_h - 1)) * difficulty:
+    if can_reach[goal_y][goal_x] >= ((stage_w - 1) + (stage_h - 1)) * difficulty:
         test = False
     else:
         test_num += 1
-        print(stage_w, stage_h, stage_w * stage_h, wall_num, can_reach[goal_y][goal_x], test_num)
+        if can_reach[goal_y][goal_x] >= 1:
+            print(stage_w, stage_h, stage_w * stage_h, wall_num, can_reach[goal_y][goal_x], test_num)
 
 #到達可能域だけ見たい場合にはコメント解除する
 # loop = False
