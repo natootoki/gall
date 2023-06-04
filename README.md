@@ -1,7 +1,7 @@
 # 環境
 Python 3.11.3  
 pyinputインストール必要  
-　→pip install pyinput  
+→pip install pyinput  
 コマンドプロンプトで.pyファイルを実行して遊びます  
 今のメインはtest.py  
 
