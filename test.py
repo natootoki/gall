@@ -26,7 +26,7 @@ stage_min_w = 17
 stage_max_w = 65
 stage_min_h = 9
 stage_max_h = 33
-difficulty = 1.5
+difficulty = 1 #採用する最低の難易度。1が最低
 
 stage_w = random.randrange(stage_min_w, stage_max_w, 2) #小さすぎると壁が少なすぎる
 stage_h = random.randrange(stage_min_h, stage_max_h, 2) #小さすぎると壁が少なすぎる
@@ -50,25 +50,56 @@ goal_y = stage_h-1
 is_goal = False
 
 wall = "■"
-wall_num = max(1, stage_w * stage_h // 5 )
+wall_num = max(1, stage_w * stage_h // 2 )
 
 test = True
 test_num = 0
 while test:
 
     wall_list = []
+
+    #フォーマット（固定の部分）を作る
     for i in range(stage_h):
         for j in range(stage_w):
             if i%2 == 1 and j%2 == 1:
                 wall_list.append([j, (stage_h - 1) - i])
 
-    for i in range(wall_num):
-        while True:
-            temp_wall_x = random.randrange(stage_w)
-            temp_wall_y = random.randrange(stage_h)
-            if not [temp_wall_x, temp_wall_y] in wall_list and not [temp_wall_x, temp_wall_y] == [player_x, player_y] and not [temp_wall_x, temp_wall_y] == [goal_x, goal_y]:
-                wall_list.append([temp_wall_x, temp_wall_y])
-                break
+    #壁どうしが重ならないようにランダムに配置する
+    # for i in range(wall_num):
+    #     while True:
+    #         temp_wall_x = random.randrange(stage_w)
+    #         temp_wall_y = random.randrange(stage_h)
+    #         if not [temp_wall_x, temp_wall_y] in wall_list and not [temp_wall_x, temp_wall_y] == [player_x, player_y] and not [temp_wall_x, temp_wall_y] == [goal_x, goal_y]:
+    #             wall_list.append([temp_wall_x, temp_wall_y])
+    #             break
+
+    inner_x = random.randrange(stage_w)
+    inner_y = random.randrange(stage_h)
+    for i in range(stage_h):
+        for j in range(stage_w):
+            if not (stage_h-1)-i == stage_h-1 and not (stage_h-1)-i == 0 and not j == stage_w-1 and not j == 0:
+                if not [j, (stage_h-1)-i -1] in wall_list and not [j, (stage_h-1)-i +1] in wall_list and not [j -1, (stage_h-1)-i] in wall_list and not [j +1, (stage_h-1)-i] in wall_list:
+                    inner_x = j
+                    inner_y = (stage_h-1)-i
+                    while True:
+                        connect = random.randrange(4)
+
+                        if connect == 0 and not inner_y == stage_h-1:
+                            wall_list.append([inner_x, inner_y +1])
+                            print(inner_x, inner_y, "up")
+                            break
+                        elif connect == 1 and not inner_y == 0:
+                            wall_list.append([inner_x, inner_y -1])
+                            print(inner_x, inner_y, "down")
+                            break
+                        elif connect == 2 and not inner_x == stage_w-1:
+                            wall_list.append([inner_x +1, inner_y])
+                            print(inner_x, inner_y, "right")
+                            break
+                        elif connect == 3 and not inner_x == 0:
+                            wall_list.append([inner_x -1, inner_y])
+                            print(inner_x, inner_y, "left")
+                            break
 
     can_reach = [[0] * stage_w for i in range(stage_h)]
     can_reach[player_x][player_y] = 1
