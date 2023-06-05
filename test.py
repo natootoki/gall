@@ -22,14 +22,14 @@ unique["left"] = False
 
 loop = True
 
-stage_min_w = 12
-stage_max_w = 48
-stage_min_h = 6
-stage_max_h = 24
+stage_min_w = 17
+stage_max_w = 65
+stage_min_h = 9
+stage_max_h = 33
 difficulty = 1.5
 
-stage_w = random.randrange(stage_min_w, stage_max_w) #小さすぎると壁が少なすぎる
-stage_h = random.randrange(stage_min_h, stage_max_h) #小さすぎると壁が少なすぎる
+stage_w = random.randrange(stage_min_w, stage_max_w, 2) #小さすぎると壁が少なすぎる
+stage_h = random.randrange(stage_min_h, stage_max_h, 2) #小さすぎると壁が少なすぎる
 print("stage_w", stage_w)
 print("stage_h", stage_h)
 
@@ -50,13 +50,18 @@ goal_y = stage_h-1
 is_goal = False
 
 wall = "■"
-wall_num = max(1, stage_w * stage_h // 3 )
+wall_num = max(1, stage_w * stage_h // 5 )
 
 test = True
 test_num = 0
 while test:
 
     wall_list = []
+    for i in range(stage_h):
+        for j in range(stage_w):
+            if i%2 == 1 and j%2 == 1:
+                wall_list.append([j, (stage_h - 1) - i])
+
     for i in range(wall_num):
         while True:
             temp_wall_x = random.randrange(stage_w)
@@ -104,41 +109,42 @@ while test:
         if can_reach[goal_y][goal_x] >= 1:
             print(stage_w, stage_h, stage_w * stage_h, wall_num, can_reach[goal_y][goal_x], test_num)
 
-wall_list = []
-for i in range(stage_h):
-    for j in range(stage_w):
-        wall_list.append([j, i])
+# 最短の道のりだけ表示したい場合の処理
+# wall_list = []
+# for i in range(stage_h):
+#     for j in range(stage_w):
+#         wall_list.append([j, i])
 
-inner_x = goal_x
-inner_y = goal_y
-print("remove", inner_x, inner_y)
-wall_list.remove([inner_x, inner_y])
+# inner_x = goal_x
+# inner_y = goal_y
+# print("remove", inner_x, inner_y)
+# wall_list.remove([inner_x, inner_y])
 
-for i in range(can_reach[goal_y][goal_x]):
-    if not inner_y == stage_h-1:
-        if can_reach[inner_y+1][inner_x] == can_reach[goal_y][goal_x]-i:
-            inner_y += 1
-            print("remove", inner_x, inner_y)
-            wall_list.remove([inner_x, inner_y])
-            continue
-    if not inner_y == 0:
-        if can_reach[inner_y-1][inner_x] == can_reach[goal_y][goal_x]-i:
-            inner_y -= 1
-            print("remove", inner_x, inner_y)
-            wall_list.remove([inner_x, inner_y])
-            continue
-    if not inner_x == stage_w-1:
-        if can_reach[inner_y][inner_x+1] == can_reach[goal_y][goal_x]-i:
-            inner_x += 1
-            print("remove", inner_x, inner_y)
-            wall_list.remove([inner_x, inner_y])
-            continue
-    if not inner_x == 0:
-        if can_reach[inner_y][inner_x-1] == can_reach[goal_y][goal_x]-i:
-            inner_x -= 1
-            print("remove", inner_x, inner_y)
-            wall_list.remove([inner_x, inner_y])
-            continue
+# for i in range(can_reach[goal_y][goal_x]):
+#     if not inner_y == stage_h-1:
+#         if can_reach[inner_y+1][inner_x] == can_reach[goal_y][goal_x]-i:
+#             inner_y += 1
+#             print("remove", inner_x, inner_y)
+#             wall_list.remove([inner_x, inner_y])
+#             continue
+#     if not inner_y == 0:
+#         if can_reach[inner_y-1][inner_x] == can_reach[goal_y][goal_x]-i:
+#             inner_y -= 1
+#             print("remove", inner_x, inner_y)
+#             wall_list.remove([inner_x, inner_y])
+#             continue
+#     if not inner_x == stage_w-1:
+#         if can_reach[inner_y][inner_x+1] == can_reach[goal_y][goal_x]-i:
+#             inner_x += 1
+#             print("remove", inner_x, inner_y)
+#             wall_list.remove([inner_x, inner_y])
+#             continue
+#     if not inner_x == 0:
+#         if can_reach[inner_y][inner_x-1] == can_reach[goal_y][goal_x]-i:
+#             inner_x -= 1
+#             print("remove", inner_x, inner_y)
+#             wall_list.remove([inner_x, inner_y])
+#             continue
 
 
 #到達可能域だけ見たい場合にはコメント解除する
