@@ -86,19 +86,15 @@ while test:
 
                         if connect == 0 and not inner_y == stage_h-1:
                             wall_list.append([inner_x, inner_y +1])
-                            print(inner_x, inner_y, "up")
                             break
                         elif connect == 1 and not inner_y == 0:
                             wall_list.append([inner_x, inner_y -1])
-                            print(inner_x, inner_y, "down")
                             break
                         elif connect == 2 and not inner_x == stage_w-1:
                             wall_list.append([inner_x +1, inner_y])
-                            print(inner_x, inner_y, "right")
                             break
                         elif connect == 3 and not inner_x == 0:
                             wall_list.append([inner_x -1, inner_y])
-                            print(inner_x, inner_y, "left")
                             break
 
     can_reach = [[0] * stage_w for i in range(stage_h)]
@@ -113,24 +109,32 @@ while test:
         change=False
         for i in range(stage_h):
             for j in range(stage_w):
-                if can_reach[(stage_h-1)-i][j] >= 1:
+                if can_reach[(stage_h-1)-i][j] >= 1 and (not (stage_h-1)-i == goal_y or not j == goal_x):
                     #print(j, (stage_h-1)-i)
                     if not (stage_h-1)-i == stage_h-1:
+
                         if not [j, ((stage_h-1)-i)+1] in wall_list and can_reach[((stage_h-1)-i)+1][j] == 0:
                             can_reach[((stage_h-1)-i)+1][j] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
+
                     if not (stage_h-1)-i == 0:
+
                         if not [j, ((stage_h-1)-i)-1] in wall_list and can_reach[((stage_h-1)-i)-1][j] == 0:
                             can_reach[((stage_h-1)-i)-1][j] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
+                        
                     if not j == stage_w-1:
+
                         if not [j+1, (stage_h-1)-i] in wall_list and can_reach[(stage_h-1)-i][j+1] == 0:
                             can_reach[(stage_h-1)-i][j+1] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
+                        
                     if not j == 0:
+
                         if not [j-1, (stage_h-1)-i] in wall_list and can_reach[(stage_h-1)-i][j-1] == 0:
                             can_reach[(stage_h-1)-i][j-1] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
+                        
     # if can_reach[goal_y][goal_x] == 1:
     # if can_reach[goal_y][goal_x] >= 1 and can_reach[0][goal_x] >= 1 and can_reach[goal_y][0] >= 1 and can_reach[goal_y][goal_x] >= ((stage_w - 1) + (stage_h - 1)) * difficulty:
     if can_reach[goal_y][goal_x] >= ((stage_w - 1) + (stage_h - 1)) * difficulty:
@@ -330,7 +334,10 @@ os.system('cls')
 
 for i in range(stage_h):
     for j in range(stage_w): 
-        print(can_reach[(stage_h-1)-i][j], end="")
+        if can_reach[(stage_h-1)-i][j] == 0:
+            print("0", end="")
+        else:
+            print("1", end="")
     print("")
 
 # os.system('cls')
