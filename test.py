@@ -20,6 +20,8 @@ unique["down"] = False
 unique["right"] = False
 unique["left"] = False
 
+stroke = True
+
 loop = True
 
 stage_min_w = 17
@@ -269,15 +271,19 @@ while loop:
     #1push1処理
     if unique["up"] and not [player_x, player_y+1] in wall_list:
         player_y += 1
+        stroke = True
 
     if unique["down"] and not [player_x, player_y-1] in wall_list:
         player_y -= 1
+        stroke = True
 
     if unique["right"] and not [player_x+1, player_y] in wall_list:
         player_x += 1
+        stroke = True
 
     if unique["left"] and not [player_x-1, player_y] in wall_list:
         player_x -= 1
+        stroke = True
 
     if unique["q"]:
         loop = False
@@ -300,23 +306,26 @@ while loop:
     elif player_y > stage_h-1:
         player_y = stage_h-1
 
-    os.system('cls')
-    # print(player_x, player_y)
-    
     #ステージ描画
-    for i in range(stage_h):
-        for j in range(stage_w):
-            if player_x == j and player_y == (stage_h-1)-i:
-                print(player, end="")
-            elif goal_x == j and goal_y == (stage_h-1)-i:
-                print(goal, end="")
-            elif [j, (stage_h-1)-i] in wall_list:
-                print(wall, end="")
-            else:    
-                print("□", end="")
-        print("")
+    if stroke:
     
-    print(can_reach[goal_y][goal_x], stage_w, stage_h)
+        os.system('cls')
+        # print(player_x, player_y)
+        
+        for i in range(stage_h):
+            for j in range(stage_w):
+                if player_x == j and player_y == (stage_h-1)-i:
+                    print(player, end="")
+                elif goal_x == j and goal_y == (stage_h-1)-i:
+                    print(goal, end="")
+                elif [j, (stage_h-1)-i] in wall_list:
+                    print(wall, end="")
+                else:    
+                    print("□", end="")
+            print("")
+        
+        print(can_reach[goal_y][goal_x], stage_w, stage_h)
+        stroke = False
 
     time.sleep(0.05)
 
