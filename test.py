@@ -306,7 +306,7 @@ def main():
                 pygame.quit()
                 sys.exit()
             if event.type == KEYDOWN:
-                print("hello!")
+                pass
 
         #1push1処理
         if unique["up"] and not [player_x, player_y+1] in wall_list:
