@@ -6,6 +6,14 @@ import random
 import pynput
 from pynput import mouse, keyboard
 
+import pygame
+from pygame.locals import *
+import sys, random
+
+# 色を定義
+black = (0, 0, 0)
+red = (255, 0, 0)
+
 button = {}
 button["q"] = False
 button["up"] = False
@@ -29,6 +37,8 @@ stage_max_w = 65
 stage_min_h = 9
 stage_max_h = 33
 difficulty = 1 #採用する最低の難易度。1が最低
+
+tile_size = 16
 
 stage_w = random.randrange(stage_min_w, stage_max_w, 2) #小さすぎると壁が少なすぎる
 stage_h = random.randrange(stage_min_h, stage_max_h, 2) #小さすぎると壁が少なすぎる
@@ -266,72 +276,105 @@ listener.start()
 
 ################################処理################################
 
-while loop:
+def main():
+    global player_x, player_y, stroke, is_goal, stage_w, stage_h, tile_size, wall_list
 
-    #1push1処理
-    if unique["up"] and not [player_x, player_y+1] in wall_list:
-        player_y += 1
-        stroke = True
+    pygame.init()
+    pygame.display.set_caption("maze")
+    screen = pygame.display.set_mode((stage_w*tile_size, stage_h*tile_size))
 
-    if unique["down"] and not [player_x, player_y-1] in wall_list:
-        player_y -= 1
-        stroke = True
+    while True:
 
-    if unique["right"] and not [player_x+1, player_y] in wall_list:
-        player_x += 1
-        stroke = True
-
-    if unique["left"] and not [player_x-1, player_y] in wall_list:
-        player_x -= 1
-        stroke = True
-
-    if unique["q"]:
-        loop = False
-
-    unique["up"] = False
-    unique["down"] = False
-    unique["right"] = False
-    unique["left"] = False
-    unique["q"] = False
-
-    #端っこ判定x
-    if player_x < 0:
-        player_x = 0
-    elif player_x > stage_w-1:
-        player_x = stage_w-1
-
-    #端っこ判定y
-    if player_y < 0:
-        player_y = 0
-    elif player_y > stage_h-1:
-        player_y = stage_h-1
-
-    #ステージ描画
-    if stroke:
-    
-        os.system('cls')
-        # print(player_x, player_y)
-        
+        # 背景
+        screen.fill(black)
+        # 長方形
         for i in range(stage_h):
             for j in range(stage_w):
                 if player_x == j and player_y == (stage_h-1)-i:
-                    print(player, end="")
+                    # 円
+                    pygame.draw.circle(screen, red, (j*tile_size + tile_size/2, i*tile_size + tile_size/2), tile_size/2)
                 elif goal_x == j and goal_y == (stage_h-1)-i:
-                    print(goal, end="")
+                    pygame.draw.polygon(screen, red, [[(j+1/2)*tile_size, i*tile_size], [(j+1)*tile_size, (i+1/2)*tile_size], [(j+1/2)*tile_size, (i+1)*tile_size], [j*tile_size, (i+1/2)*tile_size]])
                 elif [j, (stage_h-1)-i] in wall_list:
-                    print(wall, end="")
-                else:    
-                    print("□", end="")
-            print("")
+                    # 長方形
+                    pygame.draw.rect(screen, red, (j*tile_size, i*tile_size, tile_size, tile_size))
+        # 描画
+        pygame.display.update()
+        # イベントを処理する --- (*5)
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                print("hello!")
+
+        #1push1処理
+        if unique["up"] and not [player_x, player_y+1] in wall_list:
+            player_y += 1
+            stroke = True
+
+        if unique["down"] and not [player_x, player_y-1] in wall_list:
+            player_y -= 1
+            stroke = True
+
+        if unique["right"] and not [player_x+1, player_y] in wall_list:
+            player_x += 1
+            stroke = True
+
+        if unique["left"] and not [player_x-1, player_y] in wall_list:
+            player_x -= 1
+            stroke = True
+
+        if unique["q"]:
+            break
+
+        unique["up"] = False
+        unique["down"] = False
+        unique["right"] = False
+        unique["left"] = False
+        unique["q"] = False
+
+        #端っこ判定x
+        if player_x < 0:
+            player_x = 0
+        elif player_x > stage_w-1:
+            player_x = stage_w-1
+
+        #端っこ判定y
+        if player_y < 0:
+            player_y = 0
+        elif player_y > stage_h-1:
+            player_y = stage_h-1
+
+        #ステージ描画
+        if stroke:
         
-        print(can_reach[goal_y][goal_x], stage_w, stage_h)
-        stroke = False
+            os.system('cls')
+            # print(player_x, player_y)
+            
+            for i in range(stage_h):
+                for j in range(stage_w):
+                    if player_x == j and player_y == (stage_h-1)-i:
+                        print(player, end="")
+                    elif goal_x == j and goal_y == (stage_h-1)-i:
+                        print(goal, end="")
+                    elif [j, (stage_h-1)-i] in wall_list:
+                        print(wall, end="")
+                    else:    
+                        print("□", end="")
+                print("")
+            
+            print(can_reach[goal_y][goal_x], stage_w, stage_h)
+            stroke = False
 
-    time.sleep(0.05)
+        time.sleep(0.05)
 
-    if player_x == goal_x and player_y == goal_y:
-        loop = False
-        is_goal = True
+        if player_x == goal_x and player_y == goal_y:
+            is_goal = True
+            break
+
+if __name__ == '__main__':
+    main()
 
 os.system('cls')
 

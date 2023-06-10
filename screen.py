@@ -21,12 +21,16 @@ def main():
     pygame.display.set_caption("maze game")
     screen = pygame.display.set_mode((tile_w*maze_w,tile_w*maze_h))
 
+    time = 0
+
     # ゲームのメインループ --- (*3)
     while True:
+        time += 1
         # 背景
         screen.fill(black)
         # 長方形
         pygame.draw.rect(screen, red, (0, 0, 32, 32))
+        pygame.draw.rect(screen, red, (64, 0, 32, 32))
         # 円
         pygame.draw.circle(screen, red, (32, 32), 16)
         # 描画
