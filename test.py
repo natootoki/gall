@@ -32,13 +32,13 @@ stroke = True
 
 loop = True
 
-stage_min_w = 17
-stage_max_w = 65
-stage_min_h = 9
-stage_max_h = 33
+stage_min_w = 65
+stage_max_w = 129
+stage_min_h = 33
+stage_max_h = 65
 difficulty = 1 #採用する最低の難易度。1が最低
 
-tile_size = 16
+tile_size = 8
 
 stage_w = random.randrange(stage_min_w, stage_max_w, 2) #小さすぎると壁が少なすぎる
 stage_h = random.randrange(stage_min_h, stage_max_h, 2) #小さすぎると壁が少なすぎる
@@ -347,22 +347,22 @@ def main():
             player_y = stage_h-1
 
         #ステージ描画
-        if stroke:
+        # if stroke:
         
-            os.system('cls')
-            # print(player_x, player_y)
+        #     os.system('cls')
+        #     # print(player_x, player_y)
             
-            for i in range(stage_h):
-                for j in range(stage_w):
-                    if player_x == j and player_y == (stage_h-1)-i:
-                        print(player, end="")
-                    elif goal_x == j and goal_y == (stage_h-1)-i:
-                        print(goal, end="")
-                    elif [j, (stage_h-1)-i] in wall_list:
-                        print(wall, end="")
-                    else:    
-                        print("□", end="")
-                print("")
+        #     for i in range(stage_h):
+        #         for j in range(stage_w):
+        #             if player_x == j and player_y == (stage_h-1)-i:
+        #                 print(player, end="")
+        #             elif goal_x == j and goal_y == (stage_h-1)-i:
+        #                 print(goal, end="")
+        #             elif [j, (stage_h-1)-i] in wall_list:
+        #                 print(wall, end="")
+        #             else:    
+        #                 print("□", end="")
+        #         print("")
             
             print(can_reach[goal_y][goal_x], stage_w, stage_h)
             stroke = False
