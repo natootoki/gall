@@ -34,10 +34,11 @@ stroke = True
 
 loop = True
 
-stage_min_w = 5
-stage_max_w = 5
-stage_min_h = 5
-stage_max_h = 5
+wh = 32 * 2 - 1
+stage_min_w = wh
+stage_max_w = wh
+stage_min_h = wh
+stage_max_h = wh
 difficulty = 1/2 #採用する最低の難易度。1が最低
 
 tile_size = 8
@@ -91,22 +92,28 @@ while test:
     inner_y = random.randrange(stage_h)
     for i in range(stage_h):
         for j in range(stage_w):
+            # 端っこなら処理しない
             if not (stage_h-1)-i == stage_h-1 and not (stage_h-1)-i == 0 and not j == stage_w-1 and not j == 0:
+                # 1マス孤立した壁を見つけたら処理する
                 if not [j, (stage_h-1)-i -1] in wall_list and not [j, (stage_h-1)-i +1] in wall_list and not [j -1, (stage_h-1)-i] in wall_list and not [j +1, (stage_h-1)-i] in wall_list:
                     inner_x = j
                     inner_y = (stage_h-1)-i
+                    # 上下左右どこかに壁を伸ばす
                     while True:
                         connect = random.randrange(4)
 
                         if connect == 0 and not inner_y == stage_h-1:
                             wall_list.append([inner_x, inner_y +1])
                             break
+
                         elif connect == 1 and not inner_y == 0:
                             wall_list.append([inner_x, inner_y -1])
                             break
+
                         elif connect == 2 and not inner_x == stage_w-1:
                             wall_list.append([inner_x +1, inner_y])
                             break
+
                         elif connect == 3 and not inner_x == 0:
                             wall_list.append([inner_x -1, inner_y])
                             break
@@ -311,19 +318,19 @@ def main():
 
         #1push1処理
         if unique["up"] and not [player_x, player_y+1] in wall_list:
-            player_y += 1
+            player_y += 2
             stroke = True
 
         if unique["down"] and not [player_x, player_y-1] in wall_list:
-            player_y -= 1
+            player_y -= 2
             stroke = True
 
         if unique["right"] and not [player_x+1, player_y] in wall_list:
-            player_x += 1
+            player_x += 2
             stroke = True
 
         if unique["left"] and not [player_x-1, player_y] in wall_list:
-            player_x -= 1
+            player_x -= 2
             stroke = True
 
         if unique["q"]:
