@@ -13,6 +13,8 @@ import sys, random
 # 色を定義
 black = (0, 0, 0)
 red = (255, 0, 0)
+white = (255, 255, 255)
+yellow = (255, 255, 0)
 
 button = {}
 button["q"] = False
@@ -32,16 +34,16 @@ stroke = True
 
 loop = True
 
-stage_min_w = 65
-stage_max_w = 129
-stage_min_h = 33
-stage_max_h = 65
-difficulty = 1 #採用する最低の難易度。1が最低
+stage_min_w = 5
+stage_max_w = 5
+stage_min_h = 5
+stage_max_h = 5
+difficulty = 1/2 #採用する最低の難易度。1が最低
 
 tile_size = 8
 
-stage_w = random.randrange(stage_min_w, stage_max_w, 2) #小さすぎると壁が少なすぎる
-stage_h = random.randrange(stage_min_h, stage_max_h, 2) #小さすぎると壁が少なすぎる
+stage_w = random.randrange(stage_min_w, stage_max_w+1, 2) #小さすぎると壁が少なすぎる
+stage_h = random.randrange(stage_min_h, stage_max_h+1, 2) #小さすぎると壁が少なすぎる
 print("stage_w", stage_w)
 print("stage_h", stage_h)
 
@@ -287,14 +289,13 @@ def main():
 
         # 背景
         screen.fill(black)
-        # 長方形
         for i in range(stage_h):
             for j in range(stage_w):
                 if player_x == j and player_y == (stage_h-1)-i:
                     # 円
-                    pygame.draw.circle(screen, red, (j*tile_size + tile_size/2, i*tile_size + tile_size/2), tile_size/2)
+                    pygame.draw.circle(screen, white, (j*tile_size + tile_size/2, i*tile_size + tile_size/2), tile_size/2)
                 elif goal_x == j and goal_y == (stage_h-1)-i:
-                    pygame.draw.polygon(screen, red, [[(j+1/2)*tile_size, i*tile_size], [(j+1)*tile_size, (i+1/2)*tile_size], [(j+1/2)*tile_size, (i+1)*tile_size], [j*tile_size, (i+1/2)*tile_size]])
+                    pygame.draw.polygon(screen, yellow, [[(j+1/2)*tile_size, i*tile_size], [(j+1)*tile_size, (i+1/2)*tile_size], [(j+1/2)*tile_size, (i+1)*tile_size], [j*tile_size, (i+1/2)*tile_size]])
                 elif [j, (stage_h-1)-i] in wall_list:
                     # 長方形
                     pygame.draw.rect(screen, red, (j*tile_size, i*tile_size, tile_size, tile_size))
