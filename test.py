@@ -41,7 +41,7 @@ stage_min_h = wh
 stage_max_h = wh
 difficulty = 1/2 #採用する最低の難易度。1が最低
 
-tile_size = 8
+tile_size = 12
 
 stage_w = random.randrange(stage_min_w, stage_max_w+1, 2) #小さすぎると壁が少なすぎる
 stage_h = random.randrange(stage_min_h, stage_max_h+1, 2) #小さすぎると壁が少なすぎる
