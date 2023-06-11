@@ -66,7 +66,7 @@ is_goal = False
 
 wall = "■"
 wall_num = max(1, stage_w * stage_h // 2 )
-wall_min_length = 31
+wall_min_length = 33
 
 test = True
 test_num = 0
@@ -287,6 +287,7 @@ for i in range(stage_h):
         if wall_length[(stage_h-1)-i][j] < min_length and not wall_length[(stage_h-1)-i][j] == 0:
             min_length = wall_length[(stage_h-1)-i][j]
 print(min_length)
+print(can_reach[goal_y][goal_x], stage_w, stage_h)
 
 
 # # 最短の道のりだけ表示したい場合の処理
@@ -496,8 +497,8 @@ def main():
         #                 print("□", end="")
         #         print("")
             
-            print(can_reach[goal_y][goal_x], stage_w, stage_h)
-            stroke = False
+        # print(can_reach[goal_y][goal_x], stage_w, stage_h)
+        # stroke = False
 
         time.sleep(0.05)
 
