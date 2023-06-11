@@ -41,7 +41,7 @@ stage_min_h = wh
 stage_max_h = wh
 difficulty = 1/2 #採用する最低の難易度。1が最低
 
-tile_size = 12
+tile_size = 15
 
 stage_w = random.randrange(stage_min_w, stage_max_w+1, 2) #小さすぎると壁が少なすぎる
 stage_h = random.randrange(stage_min_h, stage_max_h+1, 2) #小さすぎると壁が少なすぎる
@@ -66,9 +66,14 @@ is_goal = False
 
 wall = "■"
 wall_num = max(1, stage_w * stage_h // 2 )
+wall_length = [[0] * stage_w for i in range(stage_h)]
+wall_connect_list = []
+wall_min_length = 5
 
 test = True
 test_num = 0
+
+#条件に合った迷路ができるまで生成とテストを繰り返す
 while test:
 
     wall_list = []
@@ -78,6 +83,7 @@ while test:
         for j in range(stage_w):
             if i%2 == 1 and j%2 == 1:
                 wall_list.append([j, (stage_h - 1) - i])
+                wall_length[(stage_h - 1) - i][j] = 1
 
     #壁どうしが重ならないようにランダムに配置する
     # for i in range(wall_num):
@@ -88,16 +94,18 @@ while test:
     #             wall_list.append([temp_wall_x, temp_wall_y])
     #             break
 
-    inner_x = random.randrange(stage_w)
-    inner_y = random.randrange(stage_h)
+    #迷路生成
     for i in range(stage_h):
         for j in range(stage_w):
+
             # 端っこなら処理しない
             if not (stage_h-1)-i == stage_h-1 and not (stage_h-1)-i == 0 and not j == stage_w-1 and not j == 0:
+
                 # 1マス孤立した壁を見つけたら処理する
                 if not [j, (stage_h-1)-i -1] in wall_list and not [j, (stage_h-1)-i +1] in wall_list and not [j -1, (stage_h-1)-i] in wall_list and not [j +1, (stage_h-1)-i] in wall_list:
                     inner_x = j
                     inner_y = (stage_h-1)-i
+
                     # 上下左右どこかに壁を伸ばす
                     while True:
                         connect = random.randrange(4)
@@ -118,54 +126,107 @@ while test:
                             wall_list.append([inner_x -1, inner_y])
                             break
 
+    for i in range(stage_h):
+        for j in range(stage_w):
+            inner_x = j
+            inner_y = (stage_h-1)-i
+
+            # フォーマットの壁、かつ、長さが最低より短い壁に対してのみ処理する
+            if inner_x%2 == 1 and inner_y%2 == 1 and wall_length[inner_y][inner_x] < wall_min_length:
+                wall_connect_list.append([inner_x, inner_y])
+                change = True
+                wall_connect_list = []
+
+                while change:
+                    change = False
+
+                    # 到達できると分かっているマスに対して処理をする
+                    if wall_connect_list and (not inner_y == goal_y or not inner_x == goal_x):
+                        
+                        # 下端じゃない場合処理をする
+                        if not inner_y == stage_h-1:
+                            # 下のマスが壁でない、かつ、到達できると分かっていない場合、自分のマス+1の番号を振る
+                            if not [inner_x, inner_y+1] in wall_list and not [inner_x, inner_y+1] in wall_connect_list:
+                                wall_connect_list.append([inner_x, inner_y+1])
+                                change = True
+
+                        # 上端じゃない場合処理をする
+                        if not inner_y == 0:
+
+                            if not [inner_x, inner_y-1] in wall_list and not [inner_x, inner_y-1] in wall_connect_list:
+                                wall_connect_list.append([inner_x, inner_y-1])
+                                change = True
+
+                        # 右端じゃない場合処理をする
+                        if not inner_x == stage_w-1:
+
+                            if not [inner_x+1, (stage_h-1)-i] in wall_list and not [inner_x+1, inner_y] in wall_connect_list:
+                                wall_connect_list.append([inner_x+1, inner_y])
+                                change = True
+
+                        # 左端じゃない場合処理をする
+                        if not inner_x == 0:
+
+                            if not [inner_x-1, (stage_h-1)-i] in wall_list and not [inner_x-1, inner_y] in wall_connect_list:
+                                wall_connect_list.append([inner_x-1, inner_y])
+                                change = True
+    
     can_reach = [[0] * stage_w for i in range(stage_h)]
     can_reach[player_x][player_y] = 1
 
-    #print(can_reach)
-
     change = True
 
+    # テスト進行中の間はループする。前の状態から変わらなくなったらテスト完了
     while change:
-        # time.sleep(0.5)
         change=False
+
         for i in range(stage_h):
             for j in range(stage_w):
-                if can_reach[(stage_h-1)-i][j] >= 1 and (not (stage_h-1)-i == goal_y or not j == goal_x):
-                    #print(j, (stage_h-1)-i)
-                    if not (stage_h-1)-i == stage_h-1:
 
+                # 到達できると分かっているマスに対して処理をする
+                if can_reach[(stage_h-1)-i][j] >= 1 and (not (stage_h-1)-i == goal_y or not j == goal_x):
+                    
+                    # 下端じゃない場合処理をする
+                    if not (stage_h-1)-i == stage_h-1:
+                        # 下のマスが壁でない、かつ、到達できると分かっていない場合、自分のマス+1の番号を振る
                         if not [j, ((stage_h-1)-i)+1] in wall_list and can_reach[((stage_h-1)-i)+1][j] == 0:
                             can_reach[((stage_h-1)-i)+1][j] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
 
+                    # 上端じゃない場合処理をする
                     if not (stage_h-1)-i == 0:
 
                         if not [j, ((stage_h-1)-i)-1] in wall_list and can_reach[((stage_h-1)-i)-1][j] == 0:
                             can_reach[((stage_h-1)-i)-1][j] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
-                        
+
+                    # 右端じゃない場合処理をする    
                     if not j == stage_w-1:
 
                         if not [j+1, (stage_h-1)-i] in wall_list and can_reach[(stage_h-1)-i][j+1] == 0:
                             can_reach[(stage_h-1)-i][j+1] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
-                        
+
+                    # 左端じゃない場合処理をする    
                     if not j == 0:
 
                         if not [j-1, (stage_h-1)-i] in wall_list and can_reach[(stage_h-1)-i][j-1] == 0:
                             can_reach[(stage_h-1)-i][j-1] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
-                        
-    # if can_reach[goal_y][goal_x] == 1:
-    # if can_reach[goal_y][goal_x] >= 1 and can_reach[0][goal_x] >= 1 and can_reach[goal_y][0] >= 1 and can_reach[goal_y][goal_x] >= ((stage_w - 1) + (stage_h - 1)) * difficulty:
+    
+    # 最短ルートが指定の難易度よりも長ければ迷路テスト終了
     if can_reach[goal_y][goal_x] >= ((stage_w - 1) + (stage_h - 1)) * difficulty:
         test = False
+
+    # 条件にあう迷路じゃない場合は迷路を作り直す
     else:
         test_num += 1
         if can_reach[goal_y][goal_x] >= 1:
             print(stage_w, stage_h, stage_w * stage_h, wall_num, can_reach[goal_y][goal_x], test_num)
 
-# 最短の道のりだけ表示したい場合の処理
+    # test = False
+
+# # 最短の道のりだけ表示したい場合の処理
 # wall_list = []
 # for i in range(stage_h):
 #     for j in range(stage_w):
@@ -392,12 +453,17 @@ if is_goal:
 
 os.system('cls')
 
+# for i in range(stage_h):
+#     for j in range(stage_w): 
+#         if can_reach[(stage_h-1)-i][j] == 0:
+#             print("0", end="")
+#         else:
+#             print("1", end="")
+#     print("")
+
 for i in range(stage_h):
     for j in range(stage_w): 
-        if can_reach[(stage_h-1)-i][j] == 0:
-            print("0", end="")
-        else:
-            print("1", end="")
+            print(wall_length[(stage_h-1)-i][j], end="")
     print("")
 
 # os.system('cls')
