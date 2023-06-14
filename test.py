@@ -15,6 +15,8 @@ black = (0, 0, 0)
 red = (255, 0, 0)
 white = (255, 255, 255)
 yellow = (255, 255, 0)
+# 赤橙黄緑青藍紫
+colors = [(255, 0, 0), (255, 165, 0), (255, 241, 0), (0, 128, 0), (30, 144, 255), (15, 84, 116), (192, 48, 192)]
 
 button = {}
 button["q"] = False
@@ -67,6 +69,8 @@ is_goal = False
 wall = "■"
 wall_num = max(1, stage_w * stage_h // 2 )
 wall_min_length = 33
+wall_color = [[0] * stage_w for i in range(stage_h)]
+wall_cluster_num = 0
 
 test = True
 test_num = 0
@@ -217,7 +221,9 @@ while test:
                 # つながっているマスすべてのwall_lengthに、つながっている壁の数を格納する
                 for walls in wall_connect_list:
                     wall_length[walls[1]][walls[0]] = len(wall_connect_list)
+                    wall_color[walls[1]][walls[0]] = colors[wall_cluster_num % len(colors)]
                 
+                wall_cluster_num += 1
                 # print(len(wall_connect_list))
 
     can_reach = [[0] * stage_w for i in range(stage_h)]
@@ -430,7 +436,7 @@ def main():
                     pygame.draw.polygon(screen, yellow, [[(j+1/2)*tile_size, i*tile_size], [(j+1)*tile_size, (i+1/2)*tile_size], [(j+1/2)*tile_size, (i+1)*tile_size], [j*tile_size, (i+1/2)*tile_size]])
                 elif [j, (stage_h-1)-i] in wall_list:
                     # 長方形
-                    pygame.draw.rect(screen, red, (j*tile_size, i*tile_size, tile_size, tile_size))
+                    pygame.draw.rect(screen, wall_color[(stage_h-1)-i][j], (j*tile_size, i*tile_size, tile_size, tile_size))
         # 描画
         pygame.display.update()
         # イベントを処理する --- (*5)
