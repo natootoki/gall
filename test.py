@@ -433,7 +433,7 @@ def main():
         screen.fill(bg_color)
         pygame.draw.rect(screen, out_wall_color, (0*tile_size, 0*tile_size, (stage_w+1)*tile_size, tile_size))
         pygame.draw.rect(screen, out_wall_color, ((stage_w+1)*tile_size, 0*tile_size, tile_size, (stage_h+1)*tile_size))
-        pygame.draw.rect(screen, out_wall_color, (0*tile_size, (stage_h+1)*tile_size, (stage_w+1)*tile_size, tile_size))
+        pygame.draw.rect(screen, out_wall_color, (tile_size, (stage_h+1)*tile_size, (stage_w+1)*tile_size, tile_size))
         pygame.draw.rect(screen, out_wall_color, (0*tile_size, 1*tile_size, tile_size, (stage_h+1)*tile_size))
         for i in range(stage_h):
             for j in range(stage_w):
