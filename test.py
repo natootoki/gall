@@ -43,7 +43,7 @@ stage_min_w = wh
 stage_max_w = wh
 stage_min_h = wh
 stage_max_h = wh
-difficulty = 1 #採用する最低の難易度
+difficulty = 3/2 #採用する最低の難易度
 
 tile_size = 15
 
@@ -70,7 +70,7 @@ goal_y = stage_h-1
 is_goal = False
 
 wall = "■"
-wall_num = max(1, stage_w * stage_h // 2 )
+wall_num = max(1, stage_w * stage_h // 3 )
 wall_min_length = 65
 wall_color = [[0] * stage_w for i in range(stage_h)]
 wall_cluster_num = 0
@@ -92,16 +92,17 @@ while test:
                 wall_list.append([j, (stage_h - 1) - i])
                 wall_length[(stage_h - 1) - i][j] = 1
 
-    #壁どうしが重ならないようにランダムに配置する
+    # # 壁どうしが重ならないようにランダムに配置する
     # for i in range(wall_num):
     #     while True:
     #         temp_wall_x = random.randrange(stage_w)
     #         temp_wall_y = random.randrange(stage_h)
     #         if not [temp_wall_x, temp_wall_y] in wall_list and not [temp_wall_x, temp_wall_y] == [player_x, player_y] and not [temp_wall_x, temp_wall_y] == [goal_x, goal_y]:
     #             wall_list.append([temp_wall_x, temp_wall_y])
+    #             wall_color[temp_wall_y][temp_wall_x] = colors[0]
     #             break
 
-    #迷路生成（もう不要なのでは）→消すと生成に時間がかかる
+    # 迷路生成（もう不要なのでは）→消すと生成に時間がかかる
     for i in range(stage_h):
         for j in range(stage_w):
 
@@ -226,6 +227,7 @@ while test:
                     wall_length[walls[1]][walls[0]] = len(wall_connect_list)
                     wall_color[walls[1]][walls[0]] = colors[wall_cluster_num % len(colors)]
                 
+                # 壁の塊ごとに色を変える処理
                 wall_cluster_num += 1
                 # print(len(wall_connect_list))
 
