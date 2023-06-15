@@ -43,7 +43,7 @@ stage_min_w = wh
 stage_max_w = wh
 stage_min_h = wh
 stage_max_h = wh
-difficulty = 1/3 #採用する最低の難易度。1が最低
+difficulty = 1 #採用する最低の難易度
 
 tile_size = 15
 
@@ -235,6 +235,7 @@ while test:
     change = True
 
     # テスト進行中の間はループする。前の状態から変わらなくなったらテスト完了
+    max_reach = 1
     while change:
         change=False
 
@@ -243,7 +244,7 @@ while test:
                 
 
                 # 到達できると分かっているマスに対して処理をする
-                if can_reach[(stage_h-1)-i][j] >= 1 and (not (stage_h-1)-i == goal_y or not j == goal_x):
+                if can_reach[(stage_h-1)-i][j] == max_reach:
                     
                     # 下端じゃない場合処理をする
                     if not (stage_h-1)-i == stage_h-1:
@@ -272,12 +273,12 @@ while test:
                         if not [j-1, (stage_h-1)-i] in wall_list and can_reach[(stage_h-1)-i][j-1] == 0:
                             can_reach[(stage_h-1)-i][j-1] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
+
+        max_column = []
+        for i in range(stage_h):
+            max_column.append(max(can_reach[i]))
     
-    max_column = []
-    for i in range(stage_h):
-        max_column.append(max(can_reach[i]))
-    
-    max_reach = max(max_column)
+        max_reach = max(max_column)
 
     for i in range(stage_h):
         for j in range(stage_w):
@@ -296,7 +297,7 @@ while test:
         test_num += 1
         print("lost")
         if can_reach[goal_y][goal_x] >= 1:
-            print(stage_w, stage_h, stage_w * stage_h, wall_num, can_reach[goal_y][goal_x], test_num)
+            print(stage_w, stage_h, stage_w * stage_h, wall_num, max_reach, test_num)
 
     # test = False
 
