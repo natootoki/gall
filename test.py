@@ -12,9 +12,8 @@ import sys, random
 
 # 色を定義
 black = (0, 0, 0)
-red = (255, 0, 0)
+gray = (127, 127, 127)
 white = (255, 255, 255)
-yellow = (255, 255, 0)
 # 赤橙黄緑青藍紫
 colors = [(255, 0, 0), (255, 165, 0), (255, 241, 0), (0, 128, 0), (30, 144, 255), (15, 84, 116), (192, 48, 192)]
 
@@ -36,6 +35,9 @@ stroke = True
 
 loop = True
 
+bg_color = black
+out_wall_color = gray
+
 wh = 32 * 2 - 1
 stage_min_w = wh
 stage_max_w = wh
@@ -51,11 +53,13 @@ print("stage_w", stage_w)
 print("stage_h", stage_h)
 
 player = "◆"
+player_color = white
 
 player_x = 0
 player_y = 0
 
 goal = "★"
+goal_color = colors[2]
 
 #goal_x = random.randrange(stage_w)
 #goal_y = random.randrange(stage_h)
@@ -421,22 +425,26 @@ def main():
 
     pygame.init()
     pygame.display.set_caption("maze")
-    screen = pygame.display.set_mode((stage_w*tile_size, stage_h*tile_size))
+    screen = pygame.display.set_mode(((stage_w + 2) * tile_size, (stage_h + 2) * tile_size))
 
     while True:
 
         # 背景
-        screen.fill(black)
+        screen.fill(bg_color)
+        pygame.draw.rect(screen, out_wall_color, (0*tile_size, 0*tile_size, (stage_w+1)*tile_size, tile_size))
+        pygame.draw.rect(screen, out_wall_color, ((stage_w+1)*tile_size, 0*tile_size, tile_size, (stage_h+1)*tile_size))
+        pygame.draw.rect(screen, out_wall_color, (0*tile_size, (stage_h+1)*tile_size, (stage_w+1)*tile_size, tile_size))
+        pygame.draw.rect(screen, out_wall_color, (0*tile_size, 1*tile_size, tile_size, (stage_h+1)*tile_size))
         for i in range(stage_h):
             for j in range(stage_w):
                 if player_x == j and player_y == (stage_h-1)-i:
                     # 円
-                    pygame.draw.circle(screen, white, (j*tile_size + tile_size/2, i*tile_size + tile_size/2), tile_size/2)
+                    pygame.draw.circle(screen, player_color, ((j+1)*tile_size + tile_size/2, (i+1)*tile_size + tile_size/2), tile_size/2)
                 elif goal_x == j and goal_y == (stage_h-1)-i:
-                    pygame.draw.polygon(screen, yellow, [[(j+1/2)*tile_size, i*tile_size], [(j+1)*tile_size, (i+1/2)*tile_size], [(j+1/2)*tile_size, (i+1)*tile_size], [j*tile_size, (i+1/2)*tile_size]])
+                    pygame.draw.polygon(screen, goal_color, [[(j+1/2 +1)*tile_size, (i +1)*tile_size], [(j+1 +1)*tile_size, (i+1/2 +1)*tile_size], [(j+1/2 +1)*tile_size, (i+1 +1)*tile_size], [(j +1)*tile_size, (i+1/2 +1)*tile_size]])
                 elif [j, (stage_h-1)-i] in wall_list:
                     # 長方形
-                    pygame.draw.rect(screen, wall_color[(stage_h-1)-i][j], (j*tile_size, i*tile_size, tile_size, tile_size))
+                    pygame.draw.rect(screen, wall_color[(stage_h-1)-i][j], ((j+1)*tile_size, (i+1)*tile_size, tile_size, tile_size))
         # 描画
         pygame.display.update()
         # イベントを処理する --- (*5)
