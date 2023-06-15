@@ -43,7 +43,7 @@ stage_min_w = wh
 stage_max_w = wh
 stage_min_h = wh
 stage_max_h = wh
-difficulty = 1/2 #採用する最低の難易度。1が最低
+difficulty = 1/3 #採用する最低の難易度。1が最低
 
 tile_size = 15
 
@@ -67,12 +67,11 @@ goal_color = colors[2]
 goal_x = stage_w-1
 goal_y = stage_h-1
 
-
 is_goal = False
 
 wall = "■"
 wall_num = max(1, stage_w * stage_h // 2 )
-wall_min_length = 33
+wall_min_length = 65
 wall_color = [[0] * stage_w for i in range(stage_h)]
 wall_cluster_num = 0
 
@@ -102,7 +101,7 @@ while test:
     #             wall_list.append([temp_wall_x, temp_wall_y])
     #             break
 
-    #迷路生成
+    #迷路生成（もう不要なのでは）→消すと生成に時間がかかる
     for i in range(stage_h):
         for j in range(stage_w):
 
@@ -241,6 +240,7 @@ while test:
 
         for i in range(stage_h):
             for j in range(stage_w):
+                
 
                 # 到達できると分かっているマスに対して処理をする
                 if can_reach[(stage_h-1)-i][j] >= 1 and (not (stage_h-1)-i == goal_y or not j == goal_x):
@@ -273,6 +273,20 @@ while test:
                             can_reach[(stage_h-1)-i][j-1] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
     
+    max_column = []
+    for i in range(stage_h):
+        max_column.append(max(can_reach[i]))
+    
+    max_reach = max(max_column)
+
+    for i in range(stage_h):
+        for j in range(stage_w):
+            if can_reach[(stage_h-1)-i][j] == max_reach:
+                goal_y = (stage_h-1)-i
+                goal_x = j
+                break
+                break
+
     # 最短ルートが指定の難易度よりも長ければ迷路テスト終了
     if can_reach[goal_y][goal_x] >= ((stage_w - 1) + (stage_h - 1)) * difficulty:
         test = False
