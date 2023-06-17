@@ -43,7 +43,7 @@ stage_min_w = wh
 stage_max_w = wh
 stage_min_h = wh
 stage_max_h = wh
-difficulty = 2 #採用する最低の難易度
+difficulty = 5/2 #採用する最低の難易度
 
 tile_size = 15
 
@@ -102,6 +102,8 @@ while test:
     #             wall_color[temp_wall_y][temp_wall_x] = colors[0]
     #             break
 
+    print("inner_wall_connect")
+
     # 迷路生成（もう不要なのでは）→消すと生成に時間がかかる
     for i in range(stage_h):
         for j in range(stage_w):
@@ -133,6 +135,8 @@ while test:
                         elif connect == 3 and not inner_x == 1:
                             wall_list.append([inner_x -1, inner_y])
                             break
+
+    print("inner_wall_cluster")
 
     for i in range(stage_h):
         for j in range(stage_w):
@@ -208,7 +212,7 @@ while test:
                                 if not out_connect:
                                     wall_list.append([inner_x, inner_y +1])
                                     wall_connect_list.append([inner_x, inner_y +1])
-                                    print("up")
+                                    # print("up")
                                     break
 
                             # 下に伸ばす
@@ -222,7 +226,7 @@ while test:
                                 if not out_connect:
                                     wall_list.append([inner_x, inner_y -1])
                                     wall_connect_list.append([inner_x, inner_y -1])
-                                    print("down")
+                                    # print("down")
                                     break
 
                             # 右に伸ばす
@@ -236,7 +240,7 @@ while test:
                                 if not out_connect:
                                     wall_list.append([inner_x +1, inner_y])
                                     wall_connect_list.append([inner_x +1, inner_y])
-                                    print("right")
+                                    # print("right")
                                     break
 
                             # 左に伸ばす
@@ -250,7 +254,7 @@ while test:
                                 if not out_connect:
                                     wall_list.append([inner_x -1, inner_y])
                                     wall_connect_list.append([inner_x -1, inner_y])
-                                    print("left")
+                                    # print("left")
                                     break
                             
                             else:
@@ -259,7 +263,7 @@ while test:
                                     if wall_connect_list[inner_rand][0]%2 == 1 and wall_connect_list[inner_rand][1]%2 == 1:
                                         inner_x = wall_connect_list[inner_rand][0]
                                         inner_y = wall_connect_list[inner_rand][1]
-                                        print("other")
+                                        # print("other")
                                         break
 
                 # つながっているマスすべてのwall_lengthに、つながっている壁の数を格納する
@@ -270,6 +274,8 @@ while test:
                 # 壁の塊ごとに色を変える処理
                 wall_cluster_num += 1
                 # print(len(wall_connect_list))
+
+    print("out_wall_connect")
 
     # 外壁に面している壁は1箇所だけつなげる
     finish_wall = []
@@ -339,22 +345,22 @@ while test:
                             if wall_facing_list[inner_rand][0]==1:
                                 wall_list.append([wall_facing_list[inner_rand][0]-1, wall_facing_list[inner_rand][1]])
                                 wall_connect_list.append([wall_facing_list[inner_rand][0]-1, wall_facing_list[inner_rand][1]])
-                                print("out_wall")
+                                # print("out_wall")
                                 break
                             elif wall_facing_list[inner_rand][0]==stage_w-2:
                                 wall_list.append([wall_facing_list[inner_rand][0]+1, wall_facing_list[inner_rand][1]])
                                 wall_connect_list.append([wall_facing_list[inner_rand][0]+1, wall_facing_list[inner_rand][1]])
-                                print("out_wall")
+                                # print("out_wall")
                                 break
                             elif wall_facing_list[inner_rand][1]==1:
                                 wall_list.append([wall_facing_list[inner_rand][0], wall_facing_list[inner_rand][1]-1])
                                 wall_connect_list.append([wall_facing_list[inner_rand][0], wall_facing_list[inner_rand][1]-1])
-                                print("out_wall")
+                                # print("out_wall")
                                 break
                             elif wall_facing_list[inner_rand][1]==stage_h-2:
                                 wall_list.append([wall_facing_list[inner_rand][0], wall_facing_list[inner_rand][1]+1])
                                 wall_connect_list.append([wall_facing_list[inner_rand][0], wall_facing_list[inner_rand][1]+1])
-                                print("out_wall")
+                                # print("out_wall")
                                 break
                     
                     for walls in wall_connect_list:
@@ -363,6 +369,8 @@ while test:
                         finish_wall.append(walls)
                     
                     wall_cluster_num += 1
+
+    print("1 dot room remove")
 
     # 1マスで孤立して到達できないマスは1箇所壁を開ける
     for i in range(stage_h):
@@ -395,6 +403,8 @@ while test:
     can_reach[player_x][player_y] = 1
 
     change = True
+
+    print("can_reach_test")
 
     # テスト進行中の間はループする。前の状態から変わらなくなったらテスト完了
     max_reach = 1
@@ -543,7 +553,7 @@ while test:
     # 条件にあう迷路じゃない場合は迷路を作り直す
     else:
         test_num += 1
-        print("lost")
+        print(((stage_w - 1) + (stage_h - 1)) * difficulty, "lost")
         if can_reach[goal_y][goal_x] >= 1:
             print(stage_w, stage_h, stage_w * stage_h, wall_num, max_reach, test_num)
 
