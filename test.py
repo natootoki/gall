@@ -179,10 +179,13 @@ while test:
                                 wall_connect_list.append([walls[0]-1, walls[1]])
                                 change = True
 
+                    # 壁が最低値よりも小さい場合
                     if len(wall_connect_list) < wall_min_length:
                         change = True
+                        # 伸ばす対象の壁を決定する
                         while True:
                             inner_rand = random.randrange(len(wall_connect_list))
+                            # 繋がっている壁のうち、フォーマットのマスのみ対象にする
                             if wall_connect_list[inner_rand][0]%2 == 1 and wall_connect_list[inner_rand][1]%2 == 1:
                                 break
 
@@ -193,24 +196,48 @@ while test:
                         while True:
                             connect = random.randrange(4)
 
+                            # 上に伸ばす
                             if connect == 0 and not [inner_x, inner_y +1] in wall_list:
+                                # # 左は孤立しないか(上左下)
+                                # if not ([inner_x -1, inner_y +1 +1] in wall_list) or not ([inner_x -1 -1, inner_y +1] in wall_list) or not ([inner_x -1, inner_y +1 -1] in wall_list):
+                                #     # 右は孤立しないか(上右下)
+                                #     if not ([inner_x +1, inner_y +1 +1] in wall_list) or not ([inner_x +1 +1, inner_y +1] in wall_list) or not ([inner_x +1, inner_y +1 -1] in wall_list):
                                 wall_list.append([inner_x, inner_y +1])
                                 wall_connect_list.append([inner_x, inner_y +1])
+                                # print(inner_x, inner_y +1, "up")
                                 break
 
+                            # 下に伸ばす
                             elif connect == 1 and not [inner_x, inner_y -1] in wall_list:
+                                # # 左は孤立しないか(上左下)
+                                # if not ([inner_x -1, inner_y -1 +1] in wall_list) or not ([inner_x -1 -1, inner_y -1] in wall_list) or not ([inner_x -1, inner_y -1 -1] in wall_list):
+                                #     # 右は孤立しないか(上右下)
+                                #     if not ([inner_x +1, inner_y -1 +1] in wall_list) or not ([inner_x +1 +1, inner_y -1] in wall_list) or not ([inner_x +1, inner_y -1 -1] in wall_list):
                                 wall_list.append([inner_x, inner_y -1])
                                 wall_connect_list.append([inner_x, inner_y -1])
+                                # print(inner_x, inner_y -1, "down")
                                 break
 
+                            # 右に伸ばす
                             elif connect == 2 and not [inner_x +1, inner_y] in wall_list:
+                                # # 下が孤立しないか(左下右)
+                                # if not ([inner_x +1 -1, inner_y -1] in wall_list) or not ([inner_x +1, inner_y -1 -1] in wall_list) or not ([inner_x +1 +1, inner_y -1] in wall_list):
+                                #     # 上が孤立しないか(左上右)
+                                #     if not ([inner_x +1 -1, inner_y +1] in wall_list) or not ([inner_x +1, inner_y +1 +1] in wall_list) or not ([inner_x +1 +1, inner_y +1] in wall_list):
                                 wall_list.append([inner_x +1, inner_y])
                                 wall_connect_list.append([inner_x +1, inner_y])
+                                # print(inner_x +1, inner_y, "right")
                                 break
 
+                            # 左に伸ばす
                             elif connect == 3 and not [inner_x -1, inner_y] in wall_list:
+                                # # 下が孤立しないか(左下右)
+                                # if not ([inner_x -1 -1, inner_y -1] in wall_list) or not ([inner_x -1, inner_y -1 -1] in wall_list) or not ([inner_x -1 +1, inner_y -1] in wall_list):
+                                #     # 上が孤立しないか(左上右)
+                                #     if not ([inner_x -1 -1, inner_y +1] in wall_list) or not ([inner_x -1, inner_y +1 +1] in wall_list) or not ([inner_x -1 +1, inner_y +1] in wall_list):
                                 wall_list.append([inner_x -1, inner_y])
                                 wall_connect_list.append([inner_x -1, inner_y])
+                                # print(inner_x -1, inner_y, "left")
                                 break
                             
                             else:
@@ -219,8 +246,8 @@ while test:
                                     if wall_connect_list[inner_rand][0]%2 == 1 and wall_connect_list[inner_rand][1]%2 == 1:
                                         inner_x = wall_connect_list[inner_rand][0]
                                         inner_y = wall_connect_list[inner_rand][1]
+                                        # print("other")
                                         break
-                                
 
                 # つながっているマスすべてのwall_lengthに、つながっている壁の数を格納する
                 for walls in wall_connect_list:
@@ -231,7 +258,33 @@ while test:
                 wall_cluster_num += 1
                 # print(len(wall_connect_list))
 
+    for i in range(stage_h):
+        for j in range(stage_w):
+            inner_x = j
+            inner_y = (stage_h-1)-i
+            
+            if (not (inner_x == 0 or inner_x == stage_w-1 or inner_x%2 == 1)) and (not (inner_y == 0 or inner_y == stage_h-1 or inner_y%2 == 1)):
+                if [inner_x, inner_y+1] in wall_list and [inner_x, inner_y-1] in wall_list and [inner_x-1, inner_y] in wall_list and [inner_x+1, inner_y] in wall_list:
+                    # print(inner_x, inner_y)
+                    connect = random.randrange(4)
+                    # 上を消す
+                    if connect == 0:
+                        wall_list.remove([inner_x, inner_y +1])
+
+                    # 下を消す
+                    elif connect == 1:
+                        wall_list.remove([inner_x, inner_y -1])
+
+                    # 右を消す
+                    elif connect == 2:
+                        wall_list.remove([inner_x +1, inner_y])
+
+                    # 左を消す
+                    elif connect == 3:
+                        wall_list.remove([inner_x -1, inner_y])
+
     can_reach = [[0] * stage_w for i in range(stage_h)]
+    cant_reach = []
     can_reach[player_x][player_y] = 1
 
     change = True
@@ -244,7 +297,6 @@ while test:
         for i in range(stage_h):
             for j in range(stage_w):
                 
-
                 # 到達できると分かっているマスに対して処理をする
                 if can_reach[(stage_h-1)-i][j] == max_reach:
                     
@@ -276,12 +328,99 @@ while test:
                             can_reach[(stage_h-1)-i][j-1] = can_reach[((stage_h-1)-i)][j] + 1
                             change = True
 
+        # 現在何マスまで探索が進んでいるのかを管理する
         max_column = []
         for i in range(stage_h):
             max_column.append(max(can_reach[i]))
     
         max_reach = max(max_column)
 
+    for i in range(stage_h):
+        for j in range(stage_w):
+            inner_x = j
+            inner_y = (stage_h-1)-i
+            if inner_x%2==0 and inner_y%2==0 and not [inner_x, inner_y] in wall_list and can_reach[inner_y][inner_x] == 0:
+                cant_reach.append([inner_x, inner_y])
+    
+    # for cants in cant_reach:
+    #     # 上下左右どこかの壁を消す
+    #     while True:
+    #         inner_rand = random.randrange(4)
+
+    #         if inner_rand == 0 and [cants[0], cants[1] +1] in wall_list:
+    #             wall_list.remove([cants[0], cants[1] +1])
+    #             break
+
+    #         elif inner_rand == 1 and [cants[0], cants[1] -1] in wall_list:
+    #             wall_list.remove([cants[0], cants[1] -1])
+    #             break
+
+    #         elif inner_rand == 2 and [cants[0] +1, cants[1]] in wall_list:
+    #             wall_list.remove([cants[0] +1, cants[1]])
+    #             break
+
+    #         elif inner_rand == 3 and [cants[0] -1, cants[1]] in wall_list:
+    #             wall_list.remove([cants[0] -1, cants[1]])
+    #             break
+            
+    #         else:
+    #             break
+
+    # print(cant_reach)
+
+    # can_reach = [[0] * stage_w for i in range(stage_h)]
+    # cant_reach = []
+    # can_reach[player_x][player_y] = 1
+
+    # change = True
+
+    # # テスト進行中の間はループする。前の状態から変わらなくなったらテスト完了
+    # max_reach = 1
+    # while change:
+    #     change=False
+
+    #     for i in range(stage_h):
+    #         for j in range(stage_w):
+                
+    #             # 到達できると分かっているマスに対して処理をする
+    #             if can_reach[(stage_h-1)-i][j] == max_reach:
+                    
+    #                 # 下端じゃない場合処理をする
+    #                 if not (stage_h-1)-i == stage_h-1:
+    #                     # 下のマスが壁でない、かつ、到達できると分かっていない場合、自分のマス+1の番号を振る
+    #                     if not [j, ((stage_h-1)-i)+1] in wall_list and can_reach[((stage_h-1)-i)+1][j] == 0:
+    #                         can_reach[((stage_h-1)-i)+1][j] = can_reach[((stage_h-1)-i)][j] + 1
+    #                         change = True
+
+    #                 # 上端じゃない場合処理をする
+    #                 if not (stage_h-1)-i == 0:
+
+    #                     if not [j, ((stage_h-1)-i)-1] in wall_list and can_reach[((stage_h-1)-i)-1][j] == 0:
+    #                         can_reach[((stage_h-1)-i)-1][j] = can_reach[((stage_h-1)-i)][j] + 1
+    #                         change = True
+
+    #                 # 右端じゃない場合処理をする    
+    #                 if not j == stage_w-1:
+
+    #                     if not [j+1, (stage_h-1)-i] in wall_list and can_reach[(stage_h-1)-i][j+1] == 0:
+    #                         can_reach[(stage_h-1)-i][j+1] = can_reach[((stage_h-1)-i)][j] + 1
+    #                         change = True
+
+    #                 # 左端じゃない場合処理をする    
+    #                 if not j == 0:
+
+    #                     if not [j-1, (stage_h-1)-i] in wall_list and can_reach[(stage_h-1)-i][j-1] == 0:
+    #                         can_reach[(stage_h-1)-i][j-1] = can_reach[((stage_h-1)-i)][j] + 1
+    #                         change = True
+
+    #     # 現在何マスまで探索が進んでいるのかを管理する
+    #     max_column = []
+    #     for i in range(stage_h):
+    #         max_column.append(max(can_reach[i]))
+    
+    #     max_reach = max(max_column)
+
+    # ゴールの位置を決める
     for i in range(stage_h):
         for j in range(stage_w):
             if can_reach[(stage_h-1)-i][j] == max_reach:
@@ -540,13 +679,13 @@ def main():
 if __name__ == '__main__':
     main()
 
-os.system('cls')
+# os.system('cls')
 
 if is_goal:
     print("goal!!!!")
     time.sleep(3)
 
-os.system('cls')
+# os.system('cls')
 
 # for i in range(stage_h):
 #     for j in range(stage_w): 
