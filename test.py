@@ -38,14 +38,14 @@ loop = True
 bg_color = black
 out_wall_color = gray
 
-wh = 32 * 2 - 1
+wh = 16 * 2 - 1
 stage_min_w = wh
 stage_max_w = wh
 stage_min_h = wh
 stage_max_h = wh
-difficulty = 2/2 #採用する最低の難易度
+difficulty = 5/2 #採用する最低の難易度
 
-tile_size = 15
+tile_size = 30
 
 stage_w = random.randrange(stage_min_w, stage_max_w+1, 2) #小さすぎると壁が少なすぎる
 stage_h = random.randrange(stage_min_h, stage_max_h+1, 2) #小さすぎると壁が少なすぎる
@@ -71,7 +71,7 @@ is_goal = False
 
 wall = "■"
 wall_num = max(1, stage_w * stage_h // 3 )
-wall_min_length = 65
+wall_min_length = 17
 wall_color = [[0] * stage_w for i in range(stage_h)]
 wall_cluster_num = 0
 
