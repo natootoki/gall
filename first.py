@@ -29,3 +29,9 @@ print(7**2)
 
 #ランダム
 print(random.randrange(10))
+
+huga = [1,2,3,4,5]
+for h in huga:
+    print("huga", h)
+    huga.remove(h)
+print(huga)
