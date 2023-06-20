@@ -102,39 +102,39 @@ while test:
     #             wall_color[temp_wall_y][temp_wall_x] = colors[0]
     #             break
 
-    print("inner_wall_connect")
+    # print("inner_wall_connect")
 
-    # 迷路生成（もう不要なのでは）→消すと生成に時間がかかる
-    for i in range(stage_h):
-        for j in range(stage_w):
+    # # 迷路生成（もう不要なのでは）→消すと生成に時間がかかる
+    # for i in range(stage_h):
+    #     for j in range(stage_w):
 
-            # 端っこなら処理しない
-            if not (stage_h-1)-i == stage_h-1 and not (stage_h-1)-i == 0 and not j == stage_w-1 and not j == 0:
+    #         # 端っこなら処理しない
+    #         if not (stage_h-1)-i == stage_h-1 and not (stage_h-1)-i == 0 and not j == stage_w-1 and not j == 0:
 
-                # 1マス孤立した壁を見つけたら処理する
-                if not [j, (stage_h-1)-i -1] in wall_list and not [j, (stage_h-1)-i +1] in wall_list and not [j -1, (stage_h-1)-i] in wall_list and not [j +1, (stage_h-1)-i] in wall_list:
-                    inner_x = j
-                    inner_y = (stage_h-1)-i
+    #             # 1マス孤立した壁を見つけたら処理する
+    #             if not [j, (stage_h-1)-i -1] in wall_list and not [j, (stage_h-1)-i +1] in wall_list and not [j -1, (stage_h-1)-i] in wall_list and not [j +1, (stage_h-1)-i] in wall_list:
+    #                 inner_x = j
+    #                 inner_y = (stage_h-1)-i
 
-                    # 上下左右どこかに壁を伸ばす
-                    while True:
-                        connect = random.randrange(4)
+    #                 # 上下左右どこかに壁を伸ばす
+    #                 while True:
+    #                     connect = random.randrange(4)
 
-                        if connect == 0 and not inner_y == stage_h-2:
-                            wall_list.append([inner_x, inner_y +1])
-                            break
+    #                     if connect == 0 and not inner_y == stage_h-2:
+    #                         wall_list.append([inner_x, inner_y +1])
+    #                         break
 
-                        elif connect == 1 and not inner_y == 1:
-                            wall_list.append([inner_x, inner_y -1])
-                            break
+    #                     elif connect == 1 and not inner_y == 1:
+    #                         wall_list.append([inner_x, inner_y -1])
+    #                         break
 
-                        elif connect == 2 and not inner_x == stage_w-2:
-                            wall_list.append([inner_x +1, inner_y])
-                            break
+    #                     elif connect == 2 and not inner_x == stage_w-2:
+    #                         wall_list.append([inner_x +1, inner_y])
+    #                         break
 
-                        elif connect == 3 and not inner_x == 1:
-                            wall_list.append([inner_x -1, inner_y])
-                            break
+    #                     elif connect == 3 and not inner_x == 1:
+    #                         wall_list.append([inner_x -1, inner_y])
+    #                         break
 
     print("inner_wall_cluster")
 
@@ -145,7 +145,6 @@ while test:
 
             # フォーマットの壁、かつ、長さが最低より短い壁に対してのみ処理する
             if inner_x%2 == 1 and inner_y%2 == 1 and wall_length[inner_y][inner_x] < wall_min_length:
-                wall_connect_list.append([inner_x, inner_y])
                 change = True
                 wall_connect_list = [[inner_x, inner_y]]
 
@@ -265,6 +264,7 @@ while test:
 
                         can_reach_left=False
                         can_reach_right=False
+
                         can_reach = [[0] * stage_w for i in range(stage_h)]
                         if connect==0:
                             can_reach[inner_y+1][inner_x-1] = 1
@@ -389,15 +389,27 @@ while test:
                             if connect==0:
                                 wall_list.remove([inner_x, inner_y+1])
                                 wall_connect_list.remove([inner_x, inner_y+1])
+                                print("left", can_reach_left)
+                                print("right", can_reach_right)
+                                print(inner_x, inner_y+1, "removed")
                             elif connect==1:
                                 wall_list.remove([inner_x, inner_y-1])
                                 wall_connect_list.remove([inner_x, inner_y-1])
+                                print("left", can_reach_left)
+                                print("right", can_reach_right)
+                                print(inner_x, inner_y-1, "removed")
                             elif connect==2:
                                 wall_list.remove([inner_x+1, inner_y])
                                 wall_connect_list.remove([inner_x+1, inner_y])
+                                print("left", can_reach_left)
+                                print("right", can_reach_right)
+                                print(inner_x+1, inner_y, "removed")
                             elif connect==3:
                                 wall_list.remove([inner_x-1, inner_y])
                                 wall_connect_list.remove([inner_x-1, inner_y])
+                                print("left", can_reach_left)
+                                print("right", can_reach_right)
+                                print(inner_x-1, inner_y, "removed")
 
                 # つながっているマスすべてのwall_lengthに、つながっている壁の数を格納する
                 for walls in wall_connect_list:
