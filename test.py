@@ -38,14 +38,14 @@ loop = True
 bg_color = black
 out_wall_color = gray
 
-wh = 16 * 2 - 1
+wh = 32 * 2 - 1
 stage_min_w = wh
 stage_max_w = wh
 stage_min_h = wh
 stage_max_h = wh
 difficulty = 2/2 #採用する最低の難易度
 
-tile_size = 30
+tile_size = 15
 
 stage_w = random.randrange(stage_min_w, stage_max_w+1, 2) #小さすぎると壁が少なすぎる
 stage_h = random.randrange(stage_min_h, stage_max_h+1, 2) #小さすぎると壁が少なすぎる
@@ -101,40 +101,6 @@ while test:
     #             wall_list.append([temp_wall_x, temp_wall_y])
     #             wall_color[temp_wall_y][temp_wall_x] = colors[0]
     #             break
-
-    # print("inner_wall_connect")
-
-    # # 迷路生成（もう不要なのでは）→消すと生成に時間がかかる
-    # for i in range(stage_h):
-    #     for j in range(stage_w):
-
-    #         # 端っこなら処理しない
-    #         if not (stage_h-1)-i == stage_h-1 and not (stage_h-1)-i == 0 and not j == stage_w-1 and not j == 0:
-
-    #             # 1マス孤立した壁を見つけたら処理する
-    #             if not [j, (stage_h-1)-i -1] in wall_list and not [j, (stage_h-1)-i +1] in wall_list and not [j -1, (stage_h-1)-i] in wall_list and not [j +1, (stage_h-1)-i] in wall_list:
-    #                 inner_x = j
-    #                 inner_y = (stage_h-1)-i
-
-    #                 # 上下左右どこかに壁を伸ばす
-    #                 while True:
-    #                     connect = random.randrange(4)
-
-    #                     if connect == 0 and not inner_y == stage_h-2:
-    #                         wall_list.append([inner_x, inner_y +1])
-    #                         break
-
-    #                     elif connect == 1 and not inner_y == 1:
-    #                         wall_list.append([inner_x, inner_y -1])
-    #                         break
-
-    #                     elif connect == 2 and not inner_x == stage_w-2:
-    #                         wall_list.append([inner_x +1, inner_y])
-    #                         break
-
-    #                     elif connect == 3 and not inner_x == 1:
-    #                         wall_list.append([inner_x -1, inner_y])
-    #                         break
 
     print("inner_wall_cluster")
 
@@ -199,8 +165,7 @@ while test:
                                     wall_list.append([target_wall[0]-1, target_wall[1]])
                                     break
 
-                        can_reach_left=False
-                        can_reach_right=False
+                        can_reach_left_to_right = False
 
                         can_reach = []
                         if inner_rand==0:
@@ -233,44 +198,31 @@ while test:
                                 if 0 <= reaches[0]-1 and reaches[0]-1 <= stage_w-1 and 0 <= reaches[1] and reaches[1] <= stage_h-1:
                                     can_reach.append([reaches[0]-1, reaches[1]])
 
-                        if [0, 0] in can_reach:
-                            can_reach_left = True
+                            if inner_rand==0:
+                                
+                                if [target_wall[0]+1, target_wall[1]+1] in can_reach:
+                                    can_reach_left_to_right = True
+                                    break
 
-                        can_reach = []
-                        if inner_rand==0:
-                            can_reach.append([target_wall[0]+1, target_wall[1]+1])
+                            elif inner_rand==1:
 
-                        elif inner_rand==1:
-                            can_reach.append([target_wall[0]-1, target_wall[1]-1])
+                                if [target_wall[0]-1, target_wall[1]-1] in can_reach:
+                                    can_reach_left_to_right = True
+                                    break
 
-                        elif inner_rand==2:
-                            can_reach.append([target_wall[0]+1, target_wall[1]-1])
+                            elif inner_rand==2:
 
-                        elif inner_rand==3:
-                            can_reach.append([target_wall[0]-1, target_wall[1]+1])
+                                if [target_wall[0]+1, target_wall[1]-1] in can_reach:
+                                    can_reach_left_to_right = True
+                                    break
 
-                        for reaches in can_reach:
-                                        
-                            if not [reaches[0], reaches[1]+1] in wall_list and not [reaches[0], reaches[1]+1] in can_reach:
-                                if 0 <= reaches[0] and reaches[0] <= stage_w-1 and 0 <= reaches[1]+1 and reaches[1]+1 <= stage_h-1:
-                                    can_reach.append([reaches[0], reaches[1]+1])
+                            elif inner_rand==3:
 
-                            if not [reaches[0], reaches[1]-1] in wall_list and not [reaches[0], reaches[1]-1] in can_reach:
-                                if 0 <= reaches[0] and reaches[0] <= stage_w-1 and 0 <= reaches[1]-1 and reaches[1]-1 <= stage_h-1:
-                                    can_reach.append([reaches[0], reaches[1]-1])
+                                if [target_wall[0]-1, target_wall[1]+1] in can_reach:
+                                    can_reach_left_to_right = True
+                                    break
 
-                            if not [reaches[0]+1, reaches[1]] in wall_list and not [reaches[0]+1, reaches[1]] in can_reach:
-                                if 0 <= reaches[0]+1 and reaches[0]+1 <= stage_w-1 and 0 <= reaches[1] and reaches[1] <= stage_h-1:
-                                    can_reach.append([reaches[0]+1, reaches[1]])
-
-                            if not [reaches[0]-1, reaches[1]] in wall_list and not [reaches[0]-1, reaches[1]] in can_reach:
-                                if 0 <= reaches[0]-1 and reaches[0]-1 <= stage_w-1 and 0 <= reaches[1] and reaches[1] <= stage_h-1:
-                                    can_reach.append([reaches[0]-1, reaches[1]])
-                        
-                        if [0, 0] in can_reach:
-                            can_reach_right = True
-
-                        if (not can_reach_left) or (not can_reach_right):
+                        if not can_reach_left_to_right:
 
                             if inner_rand==0:
                                 wall_list.remove([target_wall[0], target_wall[1]+1])
@@ -298,7 +250,6 @@ while test:
 
                         else:
                             print(wall_list[len(wall_list)-1])
-
 
     #             # つながっているマスすべてのwall_lengthに、つながっている壁の数を格納する
     #             for walls in wall_connect_list:
