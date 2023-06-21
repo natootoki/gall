@@ -43,7 +43,7 @@ stage_min_w = wh
 stage_max_w = wh
 stage_min_h = wh
 stage_max_h = wh
-difficulty = 5/2 #採用する最低の難易度
+difficulty = 4/2 #採用する最低の難易度
 
 tile_size = 15
 
@@ -163,57 +163,43 @@ while test:
                         can_reach_left_to_right = False
 
                         can_reach = []
-                        if inner_rand==0:
-                            can_reach.append([target_wall[0]-1, target_wall[1]+1])
+                        if wall_list[len(wall_list)-1][0]%2==1:
+                            can_reach.append([wall_list[len(wall_list)-1][0]-1, wall_list[len(wall_list)-1][1]])
 
-                        elif inner_rand==1:
-                            can_reach.append([target_wall[0]+1, target_wall[1]-1])
-
-                        elif inner_rand==2:
-                            can_reach.append([target_wall[0]+1, target_wall[1]+1])
-
-                        elif inner_rand==3:
-                            can_reach.append([target_wall[0]-1, target_wall[1]-1])
+                        elif wall_list[len(wall_list)-1][1]%2==1:
+                            can_reach.append([wall_list[len(wall_list)-1][0], wall_list[len(wall_list)-1][1]+1])
 
                         for reaches in can_reach:
                                         
                             if not [reaches[0], reaches[1]+1] in wall_list and not [reaches[0], reaches[1]+1] in can_reach:
+
                                 if 0 <= reaches[0] and reaches[0] <= stage_w-1 and 0 <= reaches[1]+1 and reaches[1]+1 <= stage_h-1:
                                     can_reach.append([reaches[0], reaches[1]+1])
 
                             if not [reaches[0], reaches[1]-1] in wall_list and not [reaches[0], reaches[1]-1] in can_reach:
+
                                 if 0 <= reaches[0] and reaches[0] <= stage_w-1 and 0 <= reaches[1]-1 and reaches[1]-1 <= stage_h-1:
                                     can_reach.append([reaches[0], reaches[1]-1])
 
                             if not [reaches[0]+1, reaches[1]] in wall_list and not [reaches[0]+1, reaches[1]] in can_reach:
+
                                 if 0 <= reaches[0]+1 and reaches[0]+1 <= stage_w-1 and 0 <= reaches[1] and reaches[1] <= stage_h-1:
                                     can_reach.append([reaches[0]+1, reaches[1]])
 
                             if not [reaches[0]-1, reaches[1]] in wall_list and not [reaches[0]-1, reaches[1]] in can_reach:
+
                                 if 0 <= reaches[0]-1 and reaches[0]-1 <= stage_w-1 and 0 <= reaches[1] and reaches[1] <= stage_h-1:
                                     can_reach.append([reaches[0]-1, reaches[1]])
 
-                            if inner_rand==0:
+                            if wall_list[len(wall_list)-1][0]%2==1:
                                 
-                                if [target_wall[0]+1, target_wall[1]+1] in can_reach:
+                                if [wall_list[len(wall_list)-1][0]+1, wall_list[len(wall_list)-1][1]] in can_reach:
                                     can_reach_left_to_right = True
                                     break
 
-                            elif inner_rand==1:
+                            elif wall_list[len(wall_list)-1][1]%2==1:
 
-                                if [target_wall[0]-1, target_wall[1]-1] in can_reach:
-                                    can_reach_left_to_right = True
-                                    break
-
-                            elif inner_rand==2:
-
-                                if [target_wall[0]+1, target_wall[1]-1] in can_reach:
-                                    can_reach_left_to_right = True
-                                    break
-
-                            elif inner_rand==3:
-
-                                if [target_wall[0]-1, target_wall[1]+1] in can_reach:
+                                if [wall_list[len(wall_list)-1][0], wall_list[len(wall_list)-1][1]-1] in can_reach:
                                     can_reach_left_to_right = True
                                     break
 
