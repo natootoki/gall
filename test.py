@@ -45,7 +45,7 @@ stage_min_w = wh
 stage_max_w = wh
 stage_min_h = wh
 stage_max_h = wh
-difficulty = 5/2 #採用する最低の難易度
+difficulty = 4/2 #採用する最低の難易度
 
 tile_size = 15
 
@@ -416,7 +416,7 @@ while test:
                     wall_color[walls[1]][walls[0]] = colors[wall_cluster_num % len(colors)]
                     finish_wall.append(walls)
                 
-                wall_cluster_num += 1
+                wall_cluster_num += color_change
 
     # ゴールの位置を決める
     for i in range(stage_h):
