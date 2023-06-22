@@ -45,7 +45,7 @@ stage_min_w = wh
 stage_max_w = wh
 stage_min_h = wh
 stage_max_h = wh
-difficulty = 4/2 #採用する最低の難易度
+difficulty = 5/2 #採用する最低の難易度
 
 tile_size = 15
 
