@@ -38,6 +38,8 @@ loop = True
 bg_color = black
 out_wall_color = gray
 
+color_change = 0
+
 wh = 32 * 2 - 1
 stage_min_w = wh
 stage_max_w = wh
@@ -103,14 +105,16 @@ while test:
 
     while change:
         change = False
+
         for i in range(stage_h):
 
             for j in range(stage_w):
                 inner_x = j
                 inner_y = (stage_h-1)-i
 
-                if inner_x%2 == 1 and inner_y%2 == 1:
+                if inner_x%2 == 1 and inner_y%2 == 1 and wall_length[inner_y][inner_x] < wall_min_length:
                     wall_connect_list = [[inner_x, inner_y]]
+                    wall_candidate = []
 
                     for walls in wall_connect_list:
                                 
@@ -126,111 +130,95 @@ while test:
                         if [walls[0]-1, walls[1]] in wall_list and not [walls[0]-1, walls[1]] in wall_connect_list:
                             wall_connect_list.append([walls[0]-1, walls[1]])
 
+                    for walls in wall_connect_list:
+                        wall_length[walls[1]][walls[0]] = len(wall_connect_list)
+
                     if len(wall_connect_list) < wall_min_length:
                         change = True
                         count = 0
-                        while count < 30:
-                            count += 1
-                            while True:
-                                inner_rand = random.randrange(len(wall_connect_list))
 
-                                if wall_connect_list[inner_rand][0]%2==1 and wall_connect_list[inner_rand][1]%2==1:
-                                    break
+                        for walls in wall_connect_list:
 
-                            target_wall = wall_connect_list[inner_rand]
-                            inner_rand = random.randrange(4)
-                            
-                            if inner_rand==0 and not [target_wall[0], target_wall[1]+1] in wall_list and not [target_wall[0], target_wall[1]+1] in wall_ng_list:
-                                if 0 < target_wall[0] and target_wall[0] < stage_w-1 and 0 < target_wall[1]+1 and target_wall[1]+1 < stage_h-1:
-                                    wall_list.append([target_wall[0], target_wall[1]+1])
-                                    break
-                            
-                            elif inner_rand==1 and not [target_wall[0], target_wall[1]-1] in wall_list and not [target_wall[0], target_wall[1]-1] in wall_ng_list:
-                                if 0 < target_wall[0] and target_wall[0] < stage_w-1 and 0 < target_wall[1]-1 and target_wall[1]-1 < stage_h-1:
-                                    wall_list.append([target_wall[0], target_wall[1]-1])
-                                    break
+                            if walls[0]%2==1 and walls[1]%2==1:
 
-                            elif inner_rand==2 and not [target_wall[0]+1, target_wall[1]] in wall_list and not [target_wall[0]+1, target_wall[1]] in wall_ng_list:
-                                if 0 < target_wall[0]+1 and target_wall[0]+1 < stage_w-1 and 0 < target_wall[1] and target_wall[1] < stage_h-1:
-                                    wall_list.append([target_wall[0]+1, target_wall[1]])
-                                    break
-                            
-                            elif inner_rand==3 and not [target_wall[0]-1, target_wall[1]] in wall_list and not [target_wall[0]-1, target_wall[1]] in wall_ng_list:
-                                if 0 < target_wall[0]-1 and target_wall[0]-1 < stage_w-1 and 0 < target_wall[1] and target_wall[1] < stage_h-1:
-                                    wall_list.append([target_wall[0]-1, target_wall[1]])
-                                    break
+                                if not [walls[0], walls[1]+1] in wall_list and not [walls[0], walls[1]+1] in wall_ng_list and not [walls[0], walls[1]+1] in wall_candidate:
 
-                        can_reach_left_to_right = False
-
-                        can_reach = []
-                        if wall_list[len(wall_list)-1][0]%2==1:
-                            can_reach.append([wall_list[len(wall_list)-1][0]-1, wall_list[len(wall_list)-1][1]])
-
-                        elif wall_list[len(wall_list)-1][1]%2==1:
-                            can_reach.append([wall_list[len(wall_list)-1][0], wall_list[len(wall_list)-1][1]+1])
-
-                        for reaches in can_reach:
-                                        
-                            if not [reaches[0], reaches[1]+1] in wall_list and not [reaches[0], reaches[1]+1] in can_reach:
-
-                                if 0 <= reaches[0] and reaches[0] <= stage_w-1 and 0 <= reaches[1]+1 and reaches[1]+1 <= stage_h-1:
-                                    can_reach.append([reaches[0], reaches[1]+1])
-
-                            if not [reaches[0], reaches[1]-1] in wall_list and not [reaches[0], reaches[1]-1] in can_reach:
-
-                                if 0 <= reaches[0] and reaches[0] <= stage_w-1 and 0 <= reaches[1]-1 and reaches[1]-1 <= stage_h-1:
-                                    can_reach.append([reaches[0], reaches[1]-1])
-
-                            if not [reaches[0]+1, reaches[1]] in wall_list and not [reaches[0]+1, reaches[1]] in can_reach:
-
-                                if 0 <= reaches[0]+1 and reaches[0]+1 <= stage_w-1 and 0 <= reaches[1] and reaches[1] <= stage_h-1:
-                                    can_reach.append([reaches[0]+1, reaches[1]])
-
-                            if not [reaches[0]-1, reaches[1]] in wall_list and not [reaches[0]-1, reaches[1]] in can_reach:
-
-                                if 0 <= reaches[0]-1 and reaches[0]-1 <= stage_w-1 and 0 <= reaches[1] and reaches[1] <= stage_h-1:
-                                    can_reach.append([reaches[0]-1, reaches[1]])
-
-                            if wall_list[len(wall_list)-1][0]%2==1:
+                                    if 0 < walls[0] and walls[0] < stage_w-1 and 0 < walls[1]+1 and walls[1]+1 < stage_h-1:
+                                        wall_candidate.append([walls[0], walls[1]+1])
                                 
-                                if [wall_list[len(wall_list)-1][0]+1, wall_list[len(wall_list)-1][1]] in can_reach:
-                                    can_reach_left_to_right = True
-                                    break
+                                if not [walls[0], walls[1]-1] in wall_list and not [walls[0], walls[1]-1] in wall_ng_list and not [walls[0], walls[1]-1] in wall_candidate:
 
-                            elif wall_list[len(wall_list)-1][1]%2==1:
+                                    if 0 < walls[0] and walls[0] < stage_w-1 and 0 < walls[1]-1 and walls[1]-1 < stage_h-1:
+                                        wall_candidate.append([walls[0], walls[1]-1])
 
-                                if [wall_list[len(wall_list)-1][0], wall_list[len(wall_list)-1][1]-1] in can_reach:
-                                    can_reach_left_to_right = True
-                                    break
+                                if not [walls[0]+1, walls[1]] in wall_list and not [walls[0]+1, walls[1]] in wall_ng_list and not [walls[0]+1, walls[1]] in wall_candidate:
 
-                        if not can_reach_left_to_right:
+                                    if 0 < walls[0]+1 and walls[0]+1 < stage_w-1 and 0 < walls[1] and walls[1] < stage_h-1:
+                                        wall_candidate.append([walls[0]+1, walls[1]])
 
-                            if inner_rand==0:
-                                wall_list.remove([target_wall[0], target_wall[1]+1])
+                                if not [walls[0]-1, walls[1]] in wall_list and not [walls[0]-1, walls[1]] in wall_ng_list and not [walls[0]-1, walls[1]] in wall_candidate:
 
-                                if not [target_wall[0], target_wall[1]+1] in wall_ng_list:
-                                    wall_ng_list.append([target_wall[0], target_wall[1]+1])
+                                    if 0 < walls[0]-1 and walls[0]-1 < stage_w-1 and 0 < walls[1] and walls[1] < stage_h-1:
+                                        wall_candidate.append([walls[0]-1, walls[1]])
 
-                            elif inner_rand==1:
-                                wall_list.remove([target_wall[0], target_wall[1]-1])
+                        if len(wall_candidate)>0:
+                            inner_rand = random.randrange(len(wall_candidate))
+                            wall_list.append([wall_candidate[inner_rand][0], wall_candidate[inner_rand][1]])                            
 
-                                if not [target_wall[0], target_wall[1]-1] in wall_ng_list:
-                                    wall_ng_list.append([target_wall[0], target_wall[1]-1])
+                            can_reach_left_to_right = False
+                            can_reach = []
 
-                            elif inner_rand==2:
-                                wall_list.remove([target_wall[0]+1, target_wall[1]])
+                            if wall_list[-1][0]%2==1:
+                                can_reach.append([wall_list[-1][0]-1, wall_list[-1][1]])
 
-                                if not [target_wall[0]+1, target_wall[1]] in wall_ng_list:
-                                    wall_ng_list.append([target_wall[0]+1, target_wall[1]])
+                            elif wall_list[-1][1]%2==1:
+                                can_reach.append([wall_list[-1][0], wall_list[-1][1]+1])
 
-                            elif inner_rand==3:
-                                wall_list.remove([target_wall[0]-1, target_wall[1]])
+                            for reaches in can_reach:
+                                            
+                                if not [reaches[0], reaches[1]+1] in wall_list and not [reaches[0], reaches[1]+1] in can_reach:
 
-                                if not [target_wall[0]-1, target_wall[1]] in wall_ng_list:
-                                    wall_ng_list.append([target_wall[0]-1, target_wall[1]])
+                                    if 0 <= reaches[0] and reaches[0] <= stage_w-1 and 0 <= reaches[1]+1 and reaches[1]+1 <= stage_h-1:
+                                        can_reach.append([reaches[0], reaches[1]+1])
 
-                        else:
-                            print(wall_list[len(wall_list)-1])
+                                if not [reaches[0], reaches[1]-1] in wall_list and not [reaches[0], reaches[1]-1] in can_reach:
+
+                                    if 0 <= reaches[0] and reaches[0] <= stage_w-1 and 0 <= reaches[1]-1 and reaches[1]-1 <= stage_h-1:
+                                        can_reach.append([reaches[0], reaches[1]-1])
+
+                                if not [reaches[0]+1, reaches[1]] in wall_list and not [reaches[0]+1, reaches[1]] in can_reach:
+
+                                    if 0 <= reaches[0]+1 and reaches[0]+1 <= stage_w-1 and 0 <= reaches[1] and reaches[1] <= stage_h-1:
+                                        can_reach.append([reaches[0]+1, reaches[1]])
+
+                                if not [reaches[0]-1, reaches[1]] in wall_list and not [reaches[0]-1, reaches[1]] in can_reach:
+
+                                    if 0 <= reaches[0]-1 and reaches[0]-1 <= stage_w-1 and 0 <= reaches[1] and reaches[1] <= stage_h-1:
+                                        can_reach.append([reaches[0]-1, reaches[1]])
+
+                                if wall_list[len(wall_list)-1][0]%2==1:
+                                    
+                                    if [wall_list[-1][0]+1, wall_list[-1][1]] in can_reach:
+                                        can_reach_left_to_right = True
+                                        break
+
+                                elif wall_list[-1][1]%2==1:
+
+                                    if [wall_list[len(wall_list)-1][0], wall_list[-1][1]-1] in can_reach:
+                                        can_reach_left_to_right = True
+                                        break
+
+                            if not can_reach_left_to_right:
+
+                                if not [wall_list[-1][0], wall_list[-1][1]] in wall_ng_list:
+                                    wall_ng_list.append([wall_list[-1][0], wall_list[-1][1]])
+                                
+                                # print("　×", wall_list[-1])
+                                del wall_list[-1]
+
+                            else:
+                                pass
+                                # print("　→", wall_list[-1])
 
     # 外壁に面している壁は1箇所だけつなげる
     print("out_wall_connect")
@@ -334,7 +322,7 @@ while test:
                         wall_color[walls[1]][walls[0]] = colors[wall_cluster_num % len(colors)]
                         finish_wall.append(walls)
                     
-                    wall_cluster_num += 1
+                    wall_cluster_num += color_change
 
     print("root_test")
 
@@ -447,6 +435,7 @@ while test:
     else:
         test_num += 1
         print(((stage_w - 1) + (stage_h - 1)) * difficulty, "lost")
+
         if can_reach[goal_y][goal_x] >= 1:
             print(stage_w, stage_h, stage_w * stage_h, wall_num, max_reach, test_num)
 
@@ -458,10 +447,14 @@ while test:
 #     print("")
 
 min_length = stage_w * stage_h
+
 for i in range(stage_h):
-    for j in range(stage_w): 
+
+    for j in range(stage_w):
+
         if wall_length[(stage_h-1)-i][j] < min_length and not wall_length[(stage_h-1)-i][j] == 0:
             min_length = wall_length[(stage_h-1)-i][j]
+
 print(min_length)
 print(can_reach[goal_y][goal_x], stage_w, stage_h)
 
@@ -601,23 +594,31 @@ def main():
         pygame.draw.rect(screen, out_wall_color, ((stage_w+1)*tile_size, 0*tile_size, tile_size, (stage_h+1)*tile_size))
         pygame.draw.rect(screen, out_wall_color, (tile_size, (stage_h+1)*tile_size, (stage_w+1)*tile_size, tile_size))
         pygame.draw.rect(screen, out_wall_color, (0*tile_size, 1*tile_size, tile_size, (stage_h+1)*tile_size))
+
         for i in range(stage_h):
+
             for j in range(stage_w):
+
                 if player_x == j and player_y == (stage_h-1)-i:
                     # 円
                     pygame.draw.circle(screen, player_color, ((j+1)*tile_size + tile_size/2, (i+1)*tile_size + tile_size/2), tile_size/2)
+
                 elif goal_x == j and goal_y == (stage_h-1)-i:
                     pygame.draw.polygon(screen, goal_color, [[(j+1/2 +1)*tile_size, (i +1)*tile_size], [(j+1 +1)*tile_size, (i+1/2 +1)*tile_size], [(j+1/2 +1)*tile_size, (i+1 +1)*tile_size], [(j +1)*tile_size, (i+1/2 +1)*tile_size]])
+
                 elif [j, (stage_h-1)-i] in wall_list:
                     # 長方形
                     pygame.draw.rect(screen, wall_color[(stage_h-1)-i][j], ((j+1)*tile_size, (i+1)*tile_size, tile_size, tile_size))
         # 描画
         pygame.display.update()
+
         # イベントを処理する --- (*5)
         for event in pygame.event.get():
+
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+
             if event.type == KEYDOWN:
                 pass
 
@@ -650,12 +651,14 @@ def main():
         #端っこ判定x
         if player_x < 0:
             player_x = 0
+
         elif player_x > stage_w-1:
             player_x = stage_w-1
 
         #端っこ判定y
         if player_y < 0:
             player_y = 0
+
         elif player_y > stage_h-1:
             player_y = stage_h-1
 
