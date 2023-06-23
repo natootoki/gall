@@ -36,42 +36,38 @@ loop = True
 bg_color = black
 out_wall_color = gray
 
+# 壁のブロックごとに色を変えるかどうか
 color_change = 0
 
-wh = 32 * 2 - 1
-stage_min_w = wh
-stage_max_w = wh
-stage_min_h = wh
-stage_max_h = wh
-difficulty = 4/2 #採用する最低の難易度
+# ステージの大きさ
+wh = 16 * 2 - 1
 
+stage_min_w = wh
+stage_max_w = wh*2
+stage_min_h = wh
+stage_max_h = wh*2
+
+# ひとマスの大きさ
 tile_size = 15
 
 stage_w = random.randrange(stage_min_w, stage_max_w+1, 2) #小さすぎると壁が少なすぎる
 stage_h = random.randrange(stage_min_h, stage_max_h+1, 2) #小さすぎると壁が少なすぎる
-print("stage_w", stage_w)
-print("stage_h", stage_h)
 
-player = "◆"
 player_color = white
 
 player_x = 0
 player_y = 0
 
-goal = "★"
 goal_color = colors[2]
-
-#goal_x = random.randrange(stage_w)
-#goal_y = random.randrange(stage_h)
 
 goal_x = stage_w-1
 goal_y = stage_h-1
 
 is_goal = False
 
-wall = "■"
-wall_num = max(1, stage_w * stage_h // 3 )
-wall_min_length = 33
+# 壁の最短の長さ
+wall_min_length = 17
+
 wall_color = [[0] * stage_w for i in range(stage_h)]
 wall_cluster_num = 0
 
@@ -133,6 +129,7 @@ while test:
 
                             if walls[0]%2==1 and walls[1]%2==1:
                                 hoges = [[walls[0], walls[1]+1], [walls[0], walls[1]-1], [walls[0]+1, walls[1]], [walls[0]-1, walls[1]]]
+
                                 for hoge in hoges:
 
                                     if not hoge in wall_list and not hoge in wall_ng_list and not hoge in wall_candidate:
@@ -213,6 +210,7 @@ while test:
                         
                             # 端じゃない場合処理をする
                             if not hoge[1][1] == stage_h-1:
+
                                 # 対象のマスが壁でない、かつ、到達できると分かっていない場合、自分のマス+1の番号を振る
                                 if hoge[1] in wall_list and not hoge[1] in wall_connect_list:
                                     wall_connect_list.append(hoge[1])
@@ -248,6 +246,7 @@ while test:
                             br = False
 
                             for hoge in hoges:
+
                                 if hoge[0]:
                                     wall_list.append(hoge[1])
                                     wall_connect_list.append(hoge[1])
@@ -270,7 +269,9 @@ while test:
         hoges = [[cans[0], cans[1]+1], [cans[0], cans[1]-1], [cans[0]+1, cans[1]], [cans[0]-1, cans[1]]]
 
         for hoge in hoges:
+
             if not hoge in can_reach and 0 <= hoge[0] and hoge[0] <= stage_w-1 and 0 <= hoge[1] and hoge[1] <= stage_h-1:
+
                 if not hoge in wall_list:
                     can_reach.append(hoge)
 
@@ -344,18 +345,27 @@ def press(key):
     global player_y
     global button
     global unique
+
     try:
+
         #print('アルファベット {0} が押されました'.format(key.char))
         if "{0}".format(key.char) == "q":
+
             if not button["q"]:
                 unique["q"] = True
+
             button["q"] = True
+
     except AttributeError:
         hoges = ["up", "down", "right", "left"]
+
         for hoge in hoges:
+
             if "{0}".format(key) == "Key." + hoge:
+
                 if not button[hoge]:
                     unique[hoge] = True
+
                 button[hoge] = True
 
 def release(key):
@@ -368,6 +378,7 @@ def release(key):
         #print('アルファベット {0} が押されました'.format(key.char))
         if "{0}".format(key.char) == "a":
             button["a"] = False
+
     except AttributeError:
         hoges = ["up", "down", "right", "left"]
 
@@ -407,12 +418,11 @@ def main():
                     # 長方形
                     pygame.draw.rect(screen, wall_color[(stage_h-1)-i][j], ((j+1)*tile_size, (i+1)*tile_size, tile_size, tile_size))
 
-                if goal_x == j and goal_y == (stage_h-1)-i:
-                    pygame.draw.polygon(screen, goal_color, [[(j+1/2 +1)*tile_size, (i +1)*tile_size], [(j+1 +1)*tile_size, (i+1/2 +1)*tile_size], [(j+1/2 +1)*tile_size, (i+1 +1)*tile_size], [(j +1)*tile_size, (i+1/2 +1)*tile_size]])
+            # 多角形
+            pygame.draw.polygon(screen, goal_color, [[(goal_x+1/2 +1)*tile_size, ((stage_h-1-goal_y) +1)*tile_size], [(goal_x+1 +1)*tile_size, ((stage_h-1-goal_y)+1/2 +1)*tile_size], [(goal_x+1/2 +1)*tile_size, ((stage_h-1-goal_y)+1 +1)*tile_size], [(goal_x +1)*tile_size, ((stage_h-1-goal_y)+1/2 +1)*tile_size]])
 
-                if player_x == j and player_y == (stage_h-1)-i:
-                    # 円
-                    pygame.draw.circle(screen, player_color, ((j+1)*tile_size + tile_size/2, (i+1)*tile_size + tile_size/2), tile_size/2)
+            # 円
+            pygame.draw.circle(screen, player_color, ((player_x+1)*tile_size + tile_size/2, ((stage_h-1-player_y)+1)*tile_size + tile_size/2), tile_size/2)
 
         # 描画
         pygame.display.update()
@@ -433,33 +443,24 @@ def main():
         hoges.append(["down", not [player_x, player_y-1] in wall_list, 0, -2])
         hoges.append(["right", not [player_x+1, player_y] in wall_list, 2, 0])
         hoges.append(["left", not [player_x-1, player_y]in wall_list, -2, 0])
+
         for hoge in hoges:
 
             if unique[hoge[0]] and hoge[1]:
                 player_x += hoge[2]
                 player_y += hoge[3]
+                
+                if player_x < 0 or stage_w-1 < player_x or player_y < 0 or stage_h-1 < player_y:
+                    player_x -= hoge[2]
+                    player_y -= hoge[3]
 
         if unique["q"]:
             break
 
         for uni in unique.keys():
             unique[uni] = False
-        
-        #端っこ判定x
-        if player_x < 0:
-            player_x = 0
 
-        elif player_x > stage_w-1:
-            player_x = stage_w-1
-
-        #端っこ判定y
-        if player_y < 0:
-            player_y = 0
-
-        elif player_y > stage_h-1:
-            player_y = stage_h-1
-
-        time.sleep(0.05)
+        # time.sleep(0.1)
 
         if player_x == goal_x and player_y == goal_y:
             is_goal = True
