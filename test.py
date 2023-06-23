@@ -395,34 +395,25 @@ listener.start()
 ################################処理################################
 
 def main():
-    global player_x, player_y, is_goal, stage_w, stage_h, tile_size, wall_list
+    # global player_x, player_y, is_goal, stage_w, stage_h, tile_size, wall_list
 
     pygame.init()
     pygame.display.set_caption("maze")
-    screen = pygame.display.set_mode(((stage_w + 2) * tile_size, (stage_h + 2) * tile_size))
+    screen = pygame.display.set_mode((800, 600))
 
     while True:
 
         # 背景
         screen.fill(bg_color)
-        pygame.draw.rect(screen, out_wall_color, (0*tile_size, 0*tile_size, (stage_w+1)*tile_size, tile_size))
-        pygame.draw.rect(screen, out_wall_color, ((stage_w+1)*tile_size, 0*tile_size, tile_size, (stage_h+1)*tile_size))
-        pygame.draw.rect(screen, out_wall_color, (tile_size, (stage_h+1)*tile_size, (stage_w+1)*tile_size, tile_size))
-        pygame.draw.rect(screen, out_wall_color, (0*tile_size, 1*tile_size, tile_size, (stage_h+1)*tile_size))
 
-        for i in range(stage_h):
+        # # 長方形
+        # pygame.draw.rect(screen, wall_color[(stage_h-1)-i][j], ((j+1)*tile_size, (i+1)*tile_size, tile_size, tile_size))
 
-            for j in range(stage_w):
+        # # 多角形
+        # pygame.draw.polygon(screen, goal_color, [[(goal_x+1/2 +1)*tile_size, ((stage_h-1-goal_y) +1)*tile_size], [(goal_x+1 +1)*tile_size, ((stage_h-1-goal_y)+1/2 +1)*tile_size], [(goal_x+1/2 +1)*tile_size, ((stage_h-1-goal_y)+1 +1)*tile_size], [(goal_x +1)*tile_size, ((stage_h-1-goal_y)+1/2 +1)*tile_size]])
 
-                if [j, (stage_h-1)-i] in wall_list:
-                    # 長方形
-                    pygame.draw.rect(screen, wall_color[(stage_h-1)-i][j], ((j+1)*tile_size, (i+1)*tile_size, tile_size, tile_size))
-
-            # 多角形
-            pygame.draw.polygon(screen, goal_color, [[(goal_x+1/2 +1)*tile_size, ((stage_h-1-goal_y) +1)*tile_size], [(goal_x+1 +1)*tile_size, ((stage_h-1-goal_y)+1/2 +1)*tile_size], [(goal_x+1/2 +1)*tile_size, ((stage_h-1-goal_y)+1 +1)*tile_size], [(goal_x +1)*tile_size, ((stage_h-1-goal_y)+1/2 +1)*tile_size]])
-
-            # 円
-            pygame.draw.circle(screen, player_color, ((player_x+1)*tile_size + tile_size/2, ((stage_h-1-player_y)+1)*tile_size + tile_size/2), tile_size/2)
+        # # 円
+        # pygame.draw.circle(screen, player_color, ((player_x+1)*tile_size + tile_size/2, ((stage_h-1-player_y)+1)*tile_size + tile_size/2), tile_size/2)
 
         # 描画
         pygame.display.update()
@@ -437,22 +428,22 @@ def main():
             if event.type == KEYDOWN:
                 pass
 
-        #1push1処理
-        hoges = []
-        hoges.append(["up", not [player_x, player_y+1] in wall_list, 0, 2])
-        hoges.append(["down", not [player_x, player_y-1] in wall_list, 0, -2])
-        hoges.append(["right", not [player_x+1, player_y] in wall_list, 2, 0])
-        hoges.append(["left", not [player_x-1, player_y]in wall_list, -2, 0])
+        # #1push1処理
+        # hoges = []
+        # hoges.append(["up", not [player_x, player_y+1] in wall_list, 0, 2])
+        # hoges.append(["down", not [player_x, player_y-1] in wall_list, 0, -2])
+        # hoges.append(["right", not [player_x+1, player_y] in wall_list, 2, 0])
+        # hoges.append(["left", not [player_x-1, player_y]in wall_list, -2, 0])
 
-        for hoge in hoges:
+        # for hoge in hoges:
 
-            if unique[hoge[0]] and hoge[1]:
-                player_x += hoge[2]
-                player_y += hoge[3]
+        #     if unique[hoge[0]] and hoge[1]:
+        #         player_x += hoge[2]
+        #         player_y += hoge[3]
                 
-                if player_x < 0 or stage_w-1 < player_x or player_y < 0 or stage_h-1 < player_y:
-                    player_x -= hoge[2]
-                    player_y -= hoge[3]
+        #         if player_x < 0 or stage_w-1 < player_x or player_y < 0 or stage_h-1 < player_y:
+        #             player_x -= hoge[2]
+        #             player_y -= hoge[3]
 
         if unique["q"]:
             break
@@ -462,9 +453,9 @@ def main():
 
         # time.sleep(0.1)
 
-        if player_x == goal_x and player_y == goal_y:
-            is_goal = True
-            break
+        # if player_x == goal_x and player_y == goal_y:
+        #     is_goal = True
+        #     break
 
 if __name__ == '__main__':
     main()
