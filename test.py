@@ -31,8 +31,6 @@ unique["down"] = False
 unique["right"] = False
 unique["left"] = False
 
-stroke = True
-
 loop = True
 
 bg_color = black
@@ -353,22 +351,12 @@ def press(key):
                 unique["q"] = True
             button["q"] = True
     except AttributeError:
-        if "{0}".format(key) == "Key.up":
-            if not button["up"]:
-                unique["up"] = True
-            button["up"] = True
-        if "{0}".format(key) == "Key.down":
-            if not button["down"]:
-                unique["down"] = True
-            button["down"] = True
-        if "{0}".format(key) == "Key.right":
-            if not button["right"]:
-                unique["right"] = True
-            button["right"] = True
-        if "{0}".format(key) == "Key.left":
-            if not button["left"]:
-                unique["left"] = True
-            button["left"] = True
+        hoges = ["up", "down", "right", "left"]
+        for hoge in hoges:
+            if "{0}".format(key) == "Key." + hoge:
+                if not button[hoge]:
+                    unique[hoge] = True
+                button[hoge] = True
 
 def release(key):
     global player_x
@@ -381,14 +369,12 @@ def release(key):
         if "{0}".format(key.char) == "a":
             button["a"] = False
     except AttributeError:
-        if "{0}".format(key) == "Key.up":
-            button["up"] = False
-        if "{0}".format(key) == "Key.down":
-            button["down"] = False
-        if "{0}".format(key) == "Key.right":
-            button["right"] = False
-        if "{0}".format(key) == "Key.left":
-            button["left"] = False
+        hoges = ["up", "down", "right", "left"]
+
+        for hoge in hoges:
+
+            if "{0}".format(key) == "Key." + hoge:
+                button[hoge] = False
 
 listener = keyboard.Listener(
     on_press=press,
@@ -398,7 +384,7 @@ listener.start()
 ################################処理################################
 
 def main():
-    global player_x, player_y, stroke, is_goal, stage_w, stage_h, tile_size, wall_list
+    global player_x, player_y, is_goal, stage_w, stage_h, tile_size, wall_list
 
     pygame.init()
     pygame.display.set_caption("maze")
@@ -442,31 +428,23 @@ def main():
                 pass
 
         #1push1処理
-        if unique["up"] and not [player_x, player_y+1] in wall_list:
-            player_y += 2
-            stroke = True
+        hoges = []
+        hoges.append(["up", not [player_x, player_y+1] in wall_list, 0, 2])
+        hoges.append(["down", not [player_x, player_y-1] in wall_list, 0, -2])
+        hoges.append(["right", not [player_x+1, player_y] in wall_list, 2, 0])
+        hoges.append(["left", not [player_x-1, player_y]in wall_list, -2, 0])
+        for hoge in hoges:
 
-        if unique["down"] and not [player_x, player_y-1] in wall_list:
-            player_y -= 2
-            stroke = True
-
-        if unique["right"] and not [player_x+1, player_y] in wall_list:
-            player_x += 2
-            stroke = True
-
-        if unique["left"] and not [player_x-1, player_y] in wall_list:
-            player_x -= 2
-            stroke = True
+            if unique[hoge[0]] and hoge[1]:
+                player_x += hoge[2]
+                player_y += hoge[3]
 
         if unique["q"]:
             break
 
-        unique["up"] = False
-        unique["down"] = False
-        unique["right"] = False
-        unique["left"] = False
-        unique["q"] = False
-
+        for uni in unique.keys():
+            unique[uni] = False
+        
         #端っこ判定x
         if player_x < 0:
             player_x = 0
