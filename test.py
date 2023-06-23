@@ -117,18 +117,12 @@ while test:
                     wall_candidate = []
 
                     for walls in wall_connect_list:
-                                
-                        if [walls[0], walls[1]+1] in wall_list and not [walls[0], walls[1]+1] in wall_connect_list:
-                            wall_connect_list.append([walls[0], walls[1]+1])
+                        hoges = [[walls[0], walls[1]+1], [walls[0], walls[1]-1], [walls[0]+1, walls[1]], [walls[0]-1, walls[1]]]
 
-                        if [walls[0], walls[1]-1] in wall_list and not [walls[0], walls[1]-1] in wall_connect_list:
-                            wall_connect_list.append([walls[0], walls[1]-1])
+                        for hoge in hoges:    
 
-                        if [walls[0]+1, walls[1]] in wall_list and not [walls[0]+1, walls[1]] in wall_connect_list:
-                            wall_connect_list.append([walls[0]+1, walls[1]])
-
-                        if [walls[0]-1, walls[1]] in wall_list and not [walls[0]-1, walls[1]] in wall_connect_list:
-                            wall_connect_list.append([walls[0]-1, walls[1]])
+                            if hoge in wall_list and not hoge in wall_connect_list:
+                                wall_connect_list.append(hoge)
 
                     for walls in wall_connect_list:
                         wall_length[walls[1]][walls[0]] = len(wall_connect_list)
@@ -140,27 +134,14 @@ while test:
                         for walls in wall_connect_list:
 
                             if walls[0]%2==1 and walls[1]%2==1:
+                                hoges = [[walls[0], walls[1]+1], [walls[0], walls[1]-1], [walls[0]+1, walls[1]], [walls[0]-1, walls[1]]]
+                                for hoge in hoges:
 
-                                if not [walls[0], walls[1]+1] in wall_list and not [walls[0], walls[1]+1] in wall_ng_list and not [walls[0], walls[1]+1] in wall_candidate:
+                                    if not hoge in wall_list and not hoge in wall_ng_list and not hoge in wall_candidate:
 
-                                    if 0 < walls[0] and walls[0] < stage_w-1 and 0 < walls[1]+1 and walls[1]+1 < stage_h-1:
-                                        wall_candidate.append([walls[0], walls[1]+1])
-                                
-                                if not [walls[0], walls[1]-1] in wall_list and not [walls[0], walls[1]-1] in wall_ng_list and not [walls[0], walls[1]-1] in wall_candidate:
-
-                                    if 0 < walls[0] and walls[0] < stage_w-1 and 0 < walls[1]-1 and walls[1]-1 < stage_h-1:
-                                        wall_candidate.append([walls[0], walls[1]-1])
-
-                                if not [walls[0]+1, walls[1]] in wall_list and not [walls[0]+1, walls[1]] in wall_ng_list and not [walls[0]+1, walls[1]] in wall_candidate:
-
-                                    if 0 < walls[0]+1 and walls[0]+1 < stage_w-1 and 0 < walls[1] and walls[1] < stage_h-1:
-                                        wall_candidate.append([walls[0]+1, walls[1]])
-
-                                if not [walls[0]-1, walls[1]] in wall_list and not [walls[0]-1, walls[1]] in wall_ng_list and not [walls[0]-1, walls[1]] in wall_candidate:
-
-                                    if 0 < walls[0]-1 and walls[0]-1 < stage_w-1 and 0 < walls[1] and walls[1] < stage_h-1:
-                                        wall_candidate.append([walls[0]-1, walls[1]])
-
+                                        if 0 < hoge[0] and hoge[0] < stage_w-1 and 0 < hoge[1] and hoge[1] < stage_h-1:
+                                            wall_candidate.append(hoge)
+                                    
                         if len(wall_candidate)>0:
                             inner_rand = random.randrange(len(wall_candidate))
                             wall_list.append([wall_candidate[inner_rand][0], wall_candidate[inner_rand][1]])                            
@@ -175,26 +156,14 @@ while test:
                                 can_reach.append([wall_list[-1][0], wall_list[-1][1]+1])
 
                             for reaches in can_reach:
-                                            
-                                if not [reaches[0], reaches[1]+1] in wall_list and not [reaches[0], reaches[1]+1] in can_reach:
+                                hoges = [[reaches[0], reaches[1]+1], [reaches[0], reaches[1]-1], [reaches[0]+1, reaches[1]], [reaches[0]-1, reaches[1]]]
 
-                                    if 0 <= reaches[0] and reaches[0] <= stage_w-1 and 0 <= reaches[1]+1 and reaches[1]+1 <= stage_h-1:
-                                        can_reach.append([reaches[0], reaches[1]+1])
+                                for hoge in hoges:
+                                                
+                                    if not hoge in wall_list and not hoge in can_reach:
 
-                                if not [reaches[0], reaches[1]-1] in wall_list and not [reaches[0], reaches[1]-1] in can_reach:
-
-                                    if 0 <= reaches[0] and reaches[0] <= stage_w-1 and 0 <= reaches[1]-1 and reaches[1]-1 <= stage_h-1:
-                                        can_reach.append([reaches[0], reaches[1]-1])
-
-                                if not [reaches[0]+1, reaches[1]] in wall_list and not [reaches[0]+1, reaches[1]] in can_reach:
-
-                                    if 0 <= reaches[0]+1 and reaches[0]+1 <= stage_w-1 and 0 <= reaches[1] and reaches[1] <= stage_h-1:
-                                        can_reach.append([reaches[0]+1, reaches[1]])
-
-                                if not [reaches[0]-1, reaches[1]] in wall_list and not [reaches[0]-1, reaches[1]] in can_reach:
-
-                                    if 0 <= reaches[0]-1 and reaches[0]-1 <= stage_w-1 and 0 <= reaches[1] and reaches[1] <= stage_h-1:
-                                        can_reach.append([reaches[0]-1, reaches[1]])
+                                        if 0 <= hoge[0] and hoge[0] <= stage_w-1 and 0 <= hoge[1] and hoge[1] <= stage_h-1:
+                                            can_reach.append(hoge)
 
                                 if wall_list[len(wall_list)-1][0]%2==1:
                                     
@@ -213,12 +182,7 @@ while test:
                                 if not [wall_list[-1][0], wall_list[-1][1]] in wall_ng_list:
                                     wall_ng_list.append([wall_list[-1][0], wall_list[-1][1]])
                                 
-                                # print("　×", wall_list[-1])
                                 del wall_list[-1]
-
-                            else:
-                                pass
-                                # print("　→", wall_list[-1])
 
     # 外壁に面している壁は1箇所だけつなげる
     print("out_wall_connect")
@@ -241,34 +205,20 @@ while test:
 
                     # 到達できると分かっているマスに対して処理をする
                     for walls in wall_connect_list:
+                        hoges = []
+                        hoges.append([not walls[1] == stage_h-1, [walls[0], walls[1]+1]])
+                        hoges.append([not walls[1] == 0, [walls[0], walls[1]-1]])
+                        hoges.append([not walls[0] == stage_w-1, [walls[0]+1, walls[1]]])
+                        hoges.append([not walls[0] == 0, [walls[0]-1, walls[1]]])
+
+                        for hoge in hoges:
                         
-                        # 下端じゃない場合処理をする
-                        if not walls[1] == stage_h-1:
-                            # 下のマスが壁でない、かつ、到達できると分かっていない場合、自分のマス+1の番号を振る
-                            if [walls[0], walls[1]+1] in wall_list and not [walls[0], walls[1]+1] in wall_connect_list:
-                                wall_connect_list.append([walls[0], walls[1]+1])
-                                change = True
-
-                        # 上端じゃない場合処理をする
-                        if not walls[1] == 0:
-
-                            if [walls[0], walls[1]-1] in wall_list and not [walls[0], walls[1]-1] in wall_connect_list:
-                                wall_connect_list.append([walls[0], walls[1]-1])
-                                change = True
-
-                        # 右端じゃない場合処理をする
-                        if not walls[0] == stage_w-1:
-
-                            if [walls[0]+1, walls[1]] in wall_list and not [walls[0]+1, walls[1]] in wall_connect_list:
-                                wall_connect_list.append([walls[0]+1, walls[1]])
-                                change = True
-
-                        # 左端じゃない場合処理をする
-                        if not walls[0] == 0:
-
-                            if [walls[0]-1, walls[1]] in wall_list and not [walls[0]-1, walls[1]] in wall_connect_list:
-                                wall_connect_list.append([walls[0]-1, walls[1]])
-                                change = True
+                            # 端じゃない場合処理をする
+                            if not hoge[1][1] == stage_h-1:
+                                # 対象のマスが壁でない、かつ、到達できると分かっていない場合、自分のマス+1の番号を振る
+                                if hoge[1] in wall_list and not hoge[1] in wall_connect_list:
+                                    wall_connect_list.append(hoge[1])
+                                    change = True
 
                 # 外壁に接しているかどうか判定する
                 out_facing = False
@@ -292,125 +242,60 @@ while test:
                         inner_rand = random.randrange(len(wall_facing_list))
 
                         if wall_facing_list[inner_rand][0]%2==1 and wall_facing_list[inner_rand][1]%2==1:
+                            hoges = []
+                            hoges.append([wall_facing_list[inner_rand][0]==1, [wall_facing_list[inner_rand][0]-1, wall_facing_list[inner_rand][1]]])
+                            hoges.append([wall_facing_list[inner_rand][0]==stage_w-2, [wall_facing_list[inner_rand][0]+1, wall_facing_list[inner_rand][1]]])
+                            hoges.append([wall_facing_list[inner_rand][1]==1, [wall_facing_list[inner_rand][0], wall_facing_list[inner_rand][1]-1]])
+                            hoges.append([wall_facing_list[inner_rand][1]==stage_h-2, [wall_facing_list[inner_rand][0], wall_facing_list[inner_rand][1]+1]])
+                            br = False
 
-                            if wall_facing_list[inner_rand][0]==1:
-                                wall_list.append([wall_facing_list[inner_rand][0]-1, wall_facing_list[inner_rand][1]])
-                                wall_connect_list.append([wall_facing_list[inner_rand][0]-1, wall_facing_list[inner_rand][1]])
-                                # print("out_wall")
-                                break
-
-                            elif wall_facing_list[inner_rand][0]==stage_w-2:
-                                wall_list.append([wall_facing_list[inner_rand][0]+1, wall_facing_list[inner_rand][1]])
-                                wall_connect_list.append([wall_facing_list[inner_rand][0]+1, wall_facing_list[inner_rand][1]])
-                                # print("out_wall")
-                                break
-
-                            elif wall_facing_list[inner_rand][1]==1:
-                                wall_list.append([wall_facing_list[inner_rand][0], wall_facing_list[inner_rand][1]-1])
-                                wall_connect_list.append([wall_facing_list[inner_rand][0], wall_facing_list[inner_rand][1]-1])
-                                # print("out_wall")
-                                break
-
-                            elif wall_facing_list[inner_rand][1]==stage_h-2:
-                                wall_list.append([wall_facing_list[inner_rand][0], wall_facing_list[inner_rand][1]+1])
-                                wall_connect_list.append([wall_facing_list[inner_rand][0], wall_facing_list[inner_rand][1]+1])
-                                # print("out_wall")
+                            for hoge in hoges:
+                                if hoge[0]:
+                                    wall_list.append(hoge[1])
+                                    wall_connect_list.append(hoge[1])
+                                    br = True
+                                    break
+                            
+                            if br:
                                 break
                     
                     for walls in wall_connect_list:
                         wall_length[walls[1]][walls[0]] = len(wall_connect_list)
-                        wall_color[walls[1]][walls[0]] = colors[wall_cluster_num % len(colors)]
                         finish_wall.append(walls)
-                    
-                    wall_cluster_num += color_change
 
     print("root_test")
 
-    can_reach = [[0] * stage_w for i in range(stage_h)]
+    can_reach = [[player_x, player_y]]
     cant_reach = []
-    can_reach[player_x][player_y] = 1
 
-    # テスト進行中の間はループする。前の状態から変わらなくなったらテスト完了
-    change = True
-    max_reach = 1
+    for cans in can_reach:
+        hoges = [[cans[0], cans[1]+1], [cans[0], cans[1]-1], [cans[0]+1, cans[1]], [cans[0]-1, cans[1]]]
 
-    while change:
-        change=False
-
-        for i in range(stage_h):
-            for j in range(stage_w):
-                
-                # 到達できると分かっているマスに対して処理をする
-                if can_reach[(stage_h-1)-i][j] == max_reach:
-                    
-                    # 下端じゃない場合処理をする
-                    if not (stage_h-1)-i == stage_h-1:
-                        # 下のマスが壁でない、かつ、到達できると分かっていない場合、自分のマス+1の番号を振る
-                        if not [j, ((stage_h-1)-i)+1] in wall_list and can_reach[((stage_h-1)-i)+1][j] == 0:
-                            can_reach[((stage_h-1)-i)+1][j] = can_reach[((stage_h-1)-i)][j] + 1
-                            change = True
-
-                    # 上端じゃない場合処理をする
-                    if not (stage_h-1)-i == 0:
-
-                        if not [j, ((stage_h-1)-i)-1] in wall_list and can_reach[((stage_h-1)-i)-1][j] == 0:
-                            can_reach[((stage_h-1)-i)-1][j] = can_reach[((stage_h-1)-i)][j] + 1
-                            change = True
-
-                    # 右端じゃない場合処理をする    
-                    if not j == stage_w-1:
-
-                        if not [j+1, (stage_h-1)-i] in wall_list and can_reach[(stage_h-1)-i][j+1] == 0:
-                            can_reach[(stage_h-1)-i][j+1] = can_reach[((stage_h-1)-i)][j] + 1
-                            change = True
-
-                    # 左端じゃない場合処理をする    
-                    if not j == 0:
-
-                        if not [j-1, (stage_h-1)-i] in wall_list and can_reach[(stage_h-1)-i][j-1] == 0:
-                            can_reach[(stage_h-1)-i][j-1] = can_reach[((stage_h-1)-i)][j] + 1
-                            change = True
-
-        # 現在何マスまで探索が進んでいるのかを管理する
-        max_column = []
-
-        for i in range(stage_h):
-            max_column.append(max(can_reach[i]))
-    
-        max_reach = max(max_column)
-
-    for i in range(stage_h):
-
-        for j in range(stage_w):
-            inner_x = j
-            inner_y = (stage_h-1)-i
-
-            if inner_x%2==0 and inner_y%2==0 and not [inner_x, inner_y] in wall_list and can_reach[inner_y][inner_x] == 0:
-                cant_reach.append([inner_x, inner_y])
+        for hoge in hoges:
+            if not hoge in can_reach and 0 <= hoge[0] and hoge[0] <= stage_w-1 and 0 <= hoge[1] and hoge[1] <= stage_h-1:
+                if not hoge in wall_list:
+                    can_reach.append(hoge)
 
     # 壁に色をつける
+    print("coloring")
+    finish_wall = []
+
     for i in range(stage_h):
 
         for j in range(stage_w):
             inner_x = j
             inner_y = (stage_h-1)-i
 
-            if inner_x%2 == 1 and inner_y%2 == 1:
+            if inner_x%2 == 1 and inner_y%2 == 1 and not [inner_x, inner_y] in finish_wall:
                 wall_connect_list = [[inner_x, inner_y]]
 
                 for walls in wall_connect_list:
-                            
-                    if [walls[0], walls[1]+1] in wall_list and not [walls[0], walls[1]+1] in wall_connect_list:
-                        wall_connect_list.append([walls[0], walls[1]+1])
+                    hoges = [[walls[0], walls[1]+1], [walls[0], walls[1]-1], [walls[0]+1, walls[1]], [walls[0]-1, walls[1]]]
 
-                    if [walls[0], walls[1]-1] in wall_list and not [walls[0], walls[1]-1] in wall_connect_list:
-                        wall_connect_list.append([walls[0], walls[1]-1])
+                    for hoge in hoges:
 
-                    if [walls[0]+1, walls[1]] in wall_list and not [walls[0]+1, walls[1]] in wall_connect_list:
-                        wall_connect_list.append([walls[0]+1, walls[1]])
-
-                    if [walls[0]-1, walls[1]] in wall_list and not [walls[0]-1, walls[1]] in wall_connect_list:
-                        wall_connect_list.append([walls[0]-1, walls[1]])
+                        if hoge in wall_list and not hoge in wall_connect_list:
+                            wall_connect_list.append(hoge)
 
                 for walls in wall_connect_list:
                     wall_color[walls[1]][walls[0]] = colors[wall_cluster_num % len(colors)]
@@ -419,32 +304,12 @@ while test:
                 wall_cluster_num += color_change
 
     # ゴールの位置を決める
-    for i in range(stage_h):
+    print("put goal")
+    goal_x = can_reach[-1][0]
+    goal_y = can_reach[-1][1]
+    print(goal_x, goal_y)
 
-        for j in range(stage_w):
-
-            if can_reach[(stage_h-1)-i][j] == max_reach:
-                goal_y = (stage_h-1)-i
-                goal_x = j
-
-    # 最短ルートが指定の難易度よりも長ければ迷路テスト終了
-    if can_reach[goal_y][goal_x] >= ((stage_w - 1) + (stage_h - 1)) * difficulty:
-        test = False
-
-    # 条件にあう迷路じゃない場合は迷路を作り直す
-    else:
-        test_num += 1
-        print(((stage_w - 1) + (stage_h - 1)) * difficulty, "lost")
-
-        if can_reach[goal_y][goal_x] >= 1:
-            print(stage_w, stage_h, stage_w * stage_h, wall_num, max_reach, test_num)
-
-    # test = False
-
-# for i in range(stage_h):
-#     for j in range(stage_w): 
-#             print(wall_length[(stage_h-1)-i][j], end=",")
-#     print("")
+    test = False
 
 min_length = stage_w * stage_h
 
@@ -454,51 +319,6 @@ for i in range(stage_h):
 
         if wall_length[(stage_h-1)-i][j] < min_length and not wall_length[(stage_h-1)-i][j] == 0:
             min_length = wall_length[(stage_h-1)-i][j]
-
-print(min_length)
-print(can_reach[goal_y][goal_x], stage_w, stage_h)
-
-
-# # 最短の道のりだけ表示したい場合の処理
-# wall_list = []
-# for i in range(stage_h):
-#     for j in range(stage_w):
-#         wall_list.append([j, i])
-
-# inner_x = goal_x
-# inner_y = goal_y
-# print("remove", inner_x, inner_y)
-# wall_list.remove([inner_x, inner_y])
-
-# for i in range(can_reach[goal_y][goal_x]):
-#     if not inner_y == stage_h-1:
-#         if can_reach[inner_y+1][inner_x] == can_reach[goal_y][goal_x]-i:
-#             inner_y += 1
-#             print("remove", inner_x, inner_y)
-#             wall_list.remove([inner_x, inner_y])
-#             continue
-#     if not inner_y == 0:
-#         if can_reach[inner_y-1][inner_x] == can_reach[goal_y][goal_x]-i:
-#             inner_y -= 1
-#             print("remove", inner_x, inner_y)
-#             wall_list.remove([inner_x, inner_y])
-#             continue
-#     if not inner_x == stage_w-1:
-#         if can_reach[inner_y][inner_x+1] == can_reach[goal_y][goal_x]-i:
-#             inner_x += 1
-#             print("remove", inner_x, inner_y)
-#             wall_list.remove([inner_x, inner_y])
-#             continue
-#     if not inner_x == 0:
-#         if can_reach[inner_y][inner_x-1] == can_reach[goal_y][goal_x]-i:
-#             inner_x -= 1
-#             print("remove", inner_x, inner_y)
-#             wall_list.remove([inner_x, inner_y])
-#             continue
-
-
-#到達可能域だけ見たい場合にはコメント解除する
-# loop = False
 
 # マウス系フラグ制御
 def move(x, y):
@@ -551,13 +371,11 @@ def press(key):
             button["left"] = True
 
 def release(key):
-    # print('{0} が離されました'.format(key))
-    # if key == keyboard.Key.esc:     # escが押された場合
-    #     return False    # listenerを止める
     global player_x
     global player_y
     global button
     global unique
+
     try:
         #print('アルファベット {0} が押されました'.format(key.char))
         if "{0}".format(key.char) == "a":
@@ -599,16 +417,17 @@ def main():
 
             for j in range(stage_w):
 
+                if [j, (stage_h-1)-i] in wall_list:
+                    # 長方形
+                    pygame.draw.rect(screen, wall_color[(stage_h-1)-i][j], ((j+1)*tile_size, (i+1)*tile_size, tile_size, tile_size))
+
+                if goal_x == j and goal_y == (stage_h-1)-i:
+                    pygame.draw.polygon(screen, goal_color, [[(j+1/2 +1)*tile_size, (i +1)*tile_size], [(j+1 +1)*tile_size, (i+1/2 +1)*tile_size], [(j+1/2 +1)*tile_size, (i+1 +1)*tile_size], [(j +1)*tile_size, (i+1/2 +1)*tile_size]])
+
                 if player_x == j and player_y == (stage_h-1)-i:
                     # 円
                     pygame.draw.circle(screen, player_color, ((j+1)*tile_size + tile_size/2, (i+1)*tile_size + tile_size/2), tile_size/2)
 
-                elif goal_x == j and goal_y == (stage_h-1)-i:
-                    pygame.draw.polygon(screen, goal_color, [[(j+1/2 +1)*tile_size, (i +1)*tile_size], [(j+1 +1)*tile_size, (i+1/2 +1)*tile_size], [(j+1/2 +1)*tile_size, (i+1 +1)*tile_size], [(j +1)*tile_size, (i+1/2 +1)*tile_size]])
-
-                elif [j, (stage_h-1)-i] in wall_list:
-                    # 長方形
-                    pygame.draw.rect(screen, wall_color[(stage_h-1)-i][j], ((j+1)*tile_size, (i+1)*tile_size, tile_size, tile_size))
         # 描画
         pygame.display.update()
 
@@ -662,27 +481,6 @@ def main():
         elif player_y > stage_h-1:
             player_y = stage_h-1
 
-        #ステージ描画
-        # if stroke:
-        
-        #     os.system('cls')
-        #     # print(player_x, player_y)
-            
-        #     for i in range(stage_h):
-        #         for j in range(stage_w):
-        #             if player_x == j and player_y == (stage_h-1)-i:
-        #                 print(player, end="")
-        #             elif goal_x == j and goal_y == (stage_h-1)-i:
-        #                 print(goal, end="")
-        #             elif [j, (stage_h-1)-i] in wall_list:
-        #                 print(wall, end="")
-        #             else:    
-        #                 print("□", end="")
-        #         print("")
-            
-        # print(can_reach[goal_y][goal_x], stage_w, stage_h)
-        # stroke = False
-
         time.sleep(0.05)
 
         if player_x == goal_x and player_y == goal_y:
@@ -692,27 +490,6 @@ def main():
 if __name__ == '__main__':
     main()
 
-# os.system('cls')
-
 if is_goal:
     print("goal!!!!")
     time.sleep(3)
-
-# os.system('cls')
-
-# for i in range(stage_h):
-#     for j in range(stage_w): 
-#         if can_reach[(stage_h-1)-i][j] == 0:
-#             print("0", end="")
-#         else:
-#             print("1", end="")
-#     print("")
-
-# for i in range(stage_h):
-#     for j in range(stage_w): 
-#             print(wall_length[(stage_h-1)-i][j], end="")
-#     print("")
-
-# print(wall_connect_list)
-
-# os.system('cls')
