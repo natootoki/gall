@@ -117,17 +117,20 @@ while True:
                 if is_my_stone:    
                     can_put_square.append([j, i])
 
-    if (turn%2==1 or turn%2==0) and len(can_put_square)>0:
+    # if (turn%2==1 or turn%2==0) and len(can_put_square)>0:
+    if (turn%2==1) and len(can_put_square)>0:
         npc_put = random.randrange(len(can_put_square))
         # pygame.time.wait(500)
 
         # 先手なら黒を置く
         if turn%2==0:
             black_list.append([can_put_square[npc_put][0], can_put_square[npc_put][1]])
+            print(str(turn), "black", str([can_put_square[npc_put][0], can_put_square[npc_put][1]]))
 
         #後手なら白を置く
         elif turn%2==1:
             white_list.append([can_put_square[npc_put][0], can_put_square[npc_put][1]])
+            print(str(turn), "white", str([can_put_square[npc_put][0], can_put_square[npc_put][1]]))
 
         # 石をひっくり返す処理
         hoges = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]]
@@ -182,8 +185,6 @@ while True:
                         break
         
         for rev in reverse_stone:
-            print("rev")
-            print(rev)
             if turn%2==0:
                 white_list.remove(rev)
                 black_list.append(rev)
@@ -204,11 +205,11 @@ while True:
         if not black_skip or not white_skip:
 
             if turn%2==0:
-                print("skip black")
+                print(str(turn), "black skip")
                 black_skip = True
 
             else:
-                print("skip white")
+                print(str(turn), "white skip")
                 white_skip = True
 
             turn += 1
@@ -257,10 +258,12 @@ while True:
                 # 先手なら黒を置く
                 if turn%2==0:
                     black_list.append([target_square_num_x, target_square_num_y])
+                    print(str(turn), "black", str([target_square_num_x, target_square_num_y]))
 
                 #後手なら白を置く
                 elif turn%2==1:
                     white_list.append([target_square_num_x, target_square_num_y])
+                    print(str(turn), "white", str([target_square_num_x, target_square_num_y]))
 
                 # 石をひっくり返す処理
                 hoges = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]]
@@ -315,8 +318,6 @@ while True:
                                 break
                 
                 for rev in reverse_stone:
-                    print("rev")
-                    print(rev)
                     if turn%2==0:
                         white_list.remove(rev)
                         black_list.append(rev)
