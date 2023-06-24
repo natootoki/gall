@@ -34,12 +34,7 @@ y = HIGHT/2   # 縦座標
 
 target_square_num_x = max(0, min(int((x-board_x)//square_size), square_num_x-1))
 target_square_num_y = max(0, min(int((y-board_y)//square_size), square_num_y-1))
-
-black_list = []
-white_list = []
-
-turn = 0
-
+ 
 ### マウスカーソル表示
 pygame.mouse.set_visible(True)
  
@@ -57,10 +52,9 @@ while True:
     ### 画面描画
     surface.fill((0,0,0))
     surface.blit(text, (0,0))
-
+    # pygame.draw.circle(surface, (255,255,255), (x,y), R_SIZE, 0)
     # 長方形
     pygame.draw.rect(surface, colors[0], (board_x, board_y, square_num_x*square_size, square_num_y*square_size))
-
     for i in range(1, square_num_x):
         # 線
         pygame.draw.line(surface, black, (board_x + square_size*i, board_y), (board_x + square_size*i, board_y + square_num_y*square_size), 3)
@@ -68,13 +62,6 @@ while True:
     for i in range(1, square_num_y):
         # 線
         pygame.draw.line(surface, black, (board_x, board_y + square_size*i), (board_x + square_num_x*square_size, board_y + square_size*i), 3)
-
-    for bla in black_list:
-        pygame.draw.circle(surface, black, (board_x + (bla[0]+1/2)*square_size, board_y + (bla[1]+1/2)*square_size), R_SIZE, 0)
-    
-    for whi in white_list:
-        pygame.draw.circle(surface, black, (board_x + (whi[0]+1/2)*square_size, board_y + (whi[1]+1/2)*square_size), R_SIZE, 3)
-
     pygame.display.update()
     pygame.time.wait(W_TIME)
  
@@ -90,33 +77,7 @@ while True:
 
         # クリックされたら
         if event.type == MOUSEBUTTONDOWN:
-
-            if [target_square_num_x, target_square_num_y] in black_list:
-                black_list.remove([target_square_num_x, target_square_num_y])
-
-            elif [target_square_num_x, target_square_num_y] in white_list:
-                white_list.remove([target_square_num_x, target_square_num_y])
-
-            if turn%2==0:
-                black_list.append([target_square_num_x, target_square_num_y])
-
-            elif turn%2==1:
-                white_list.append([target_square_num_x, target_square_num_y])
-
-            turn += 1
-
-            print("black_list")
-            print(black_list)
-            print("white_list")
-            print(white_list)
-
-        # キーが押されたら
-        if event.type == KEYDOWN:
-            if event.key == K_q:
-                pygame.quit()
-                sys.exit()
-            if event.key == K_a:
-                print("hello")
+            print(x, y)
  
         ### 終了処理
         if event.type == QUIT:
