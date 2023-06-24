@@ -117,8 +117,8 @@ while True:
                 if is_my_stone:    
                     can_put_square.append([j, i])
 
-    # if (turn%2==1 or turn%2==0) and len(can_put_square)>0:
-    if (turn%2==1) and len(can_put_square)>0:
+    if (turn%2==1 or turn%2==0) and len(can_put_square)>0:
+    # if (turn%2==1) and len(can_put_square)>0:
         npc_put = random.randrange(len(can_put_square))
         # pygame.time.wait(500)
 
