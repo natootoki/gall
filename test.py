@@ -58,21 +58,33 @@ while True:
     surface.fill((0,0,0))
     surface.blit(text, (0,0))
 
-    # 長方形
+    can_put_square = []
+    for i in range(square_num_y):
+        for j in range(square_num_x):
+            if not [j, i] in black_list and not [j, i] in white_list:
+                can_put_square.append([j, i])
+
+    # 長方形（盤面）
     pygame.draw.rect(surface, colors[0], (board_x, board_y, square_num_x*square_size, square_num_y*square_size))
 
+    for cans in can_put_square:
+        # 長方形（石を置けるマス）
+        pygame.draw.rect(surface, colors[1], (board_x + cans[0]*square_size, board_y + cans[1]*square_size, square_size, square_size))
+
     for i in range(1, square_num_x):
-        # 線
+        # 線（マス区切り線：縦）
         pygame.draw.line(surface, black, (board_x + square_size*i, board_y), (board_x + square_size*i, board_y + square_num_y*square_size), 3)
 
     for i in range(1, square_num_y):
-        # 線
+        # 線（マス区切り線：横）
         pygame.draw.line(surface, black, (board_x, board_y + square_size*i), (board_x + square_num_x*square_size, board_y + square_size*i), 3)
 
     for bla in black_list:
+        # 円（黒の石）
         pygame.draw.circle(surface, black, (board_x + (bla[0]+1/2)*square_size, board_y + (bla[1]+1/2)*square_size), R_SIZE, 0)
     
     for whi in white_list:
+        # 円（白の石）
         pygame.draw.circle(surface, black, (board_x + (whi[0]+1/2)*square_size, board_y + (whi[1]+1/2)*square_size), R_SIZE, 3)
 
     pygame.display.update()
