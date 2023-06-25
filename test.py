@@ -6,12 +6,12 @@ from pygame.locals import *
 import random
  
 ### 定数
-WIDE   = 640  # 画面横サイズ
-HIGHT  = 400  # 画面縦サイズ
-R_SIZE = 10   # 円半径
+WIDE   = 800  # 画面横サイズ
+HIGHT  = 600  # 画面縦サイズ
+R_SIZE = 20   # 円半径
 W_TIME = 10   # 待ち時間
 
-square_size = 32
+square_size = 64
 
 square_num_x = 8
 square_num_y = 8
@@ -40,13 +40,13 @@ target_square_num_y = max(0, min(int((y-board_y)//square_size), square_num_y-1))
 black_list = [[3, 4], [4, 3]]
 white_list = [[3, 3], [4, 4]]
 
-# black_list = [[1, 0], [3, 0]]
-# white_list = [[2, 0], [4, 0]]
-
 turn = 0
 
 black_skip = False
 white_skip = False
+
+one = False # 先攻がコンピュータかどうか
+two = False # 後攻がコンピュータかどうか
 
 ### マウスカーソル表示
 pygame.mouse.set_visible(True)
@@ -75,7 +75,7 @@ while True:
 
             # 石が置かれていないマスには石を置ける可能性がある
             if not [j, i] in black_list and not [j, i] in white_list:
-                #敵の石の隣には石を置ける可能性がある
+                # 敵の石の隣には石を置ける可能性がある
                 hoges = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]]
                 is_my_stone = False
 
@@ -117,20 +117,22 @@ while True:
                 if is_my_stone:    
                     can_put_square.append([j, i])
 
-    if (turn%2==1 or turn%2==0) and len(can_put_square)>0:
-    # if (turn%2==1) and len(can_put_square)>0:
+    npc_put = -1
+    npc_move = False
+    if len(can_put_square)>0:
         npc_put = random.randrange(len(can_put_square))
-        # pygame.time.wait(500)
 
         # 先手なら黒を置く
-        if turn%2==0:
+        if turn%2==0 and one:
             black_list.append([can_put_square[npc_put][0], can_put_square[npc_put][1]])
             print(str(turn), "black", str([can_put_square[npc_put][0], can_put_square[npc_put][1]]))
+            npc_move = True
 
-        #後手なら白を置く
-        elif turn%2==1:
+        # 後手なら白を置く
+        elif turn%2==1 and two:
             white_list.append([can_put_square[npc_put][0], can_put_square[npc_put][1]])
             print(str(turn), "white", str([can_put_square[npc_put][0], can_put_square[npc_put][1]]))
+            npc_move = True
 
         # 石をひっくり返す処理
         hoges = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]]
@@ -197,7 +199,9 @@ while True:
             black_skip = False
         else:
             white_skip = False
-        turn += 1
+        if npc_move:
+            turn += 1
+            npc_move = False
 
     # 打つ手が無い時のスキップ処理
     if len(can_put_square) == 0:
@@ -207,10 +211,16 @@ while True:
             if turn%2==0:
                 print(str(turn), "black skip")
                 black_skip = True
+                if black_skip and white_skip:
+                    print("black ", str(len(black_list)))
+                    print("white ", str(len(white_list))) 
 
             else:
                 print(str(turn), "white skip")
                 white_skip = True
+                if black_skip and white_skip:
+                    print("black ", str(len(black_list)))
+                    print("white ", str(len(white_list))) 
 
             turn += 1
 
@@ -260,7 +270,7 @@ while True:
                     black_list.append([target_square_num_x, target_square_num_y])
                     print(str(turn), "black", str([target_square_num_x, target_square_num_y]))
 
-                #後手なら白を置く
+                # 後手なら白を置く
                 elif turn%2==1:
                     white_list.append([target_square_num_x, target_square_num_y])
                     print(str(turn), "white", str([target_square_num_x, target_square_num_y]))
