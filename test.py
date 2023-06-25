@@ -45,6 +45,9 @@ turn = 0
 black_skip = False
 white_skip = False
 
+black_player = False
+white_player = False
+
 ### マウスカーソル表示
 pygame.mouse.set_visible(True)
  
@@ -114,7 +117,7 @@ while True:
                 if is_my_stone:    
                     can_put_square.append([j, i])
 
-    if True:
+    if (not black_player and turn%2==0) or (not white_player and turn%2==1):
         if len(can_put_square)>0:
             npc_put = random.randrange(len(can_put_square))
 
@@ -348,6 +351,10 @@ while True:
 
                 black_skip = False
                 white_skip = False
+            if event.key == K_1:
+                black_player = not black_player
+            if event.key == K_2:
+                white_player = not white_player
  
         ### 終了処理
         if event.type == QUIT:
