@@ -9,7 +9,7 @@ import random
 WIDE   = 800  # 画面横サイズ
 HIGHT  = 600  # 画面縦サイズ
 R_SIZE = 20   # 円半径
-W_TIME = 10   # 待ち時間
+W_TIME = 1   # 待ち時間
 
 square_size = 64
 
@@ -219,6 +219,16 @@ while True:
                         print("white ", str(len(white_list))) 
 
                 turn += 1
+
+    # 条件を満たす決着まで自動対戦続行
+    if black_skip and white_skip and not (len(black_list)>63) and not (len(white_list)>63):
+        black_list = [[3, 4], [4, 3]]
+        white_list = [[3, 3], [4, 4]]
+
+        turn = 0
+
+        black_skip = False
+        white_skip = False
 
     font = pygame.font.SysFont('arial', 15)
 
