@@ -45,9 +45,6 @@ turn = 0
 black_skip = False
 white_skip = False
 
-one = False # 先攻がコンピュータかどうか
-two = False # 後攻がコンピュータかどうか
-
 ### マウスカーソル表示
 pygame.mouse.set_visible(True)
  
@@ -117,91 +114,87 @@ while True:
                 if is_my_stone:    
                     can_put_square.append([j, i])
 
-    npc_put = -1
-    npc_move = False
-    if len(can_put_square)>0:
-        npc_put = random.randrange(len(can_put_square))
+    if True:
+        if len(can_put_square)>0:
+            npc_put = random.randrange(len(can_put_square))
 
-        # 先手なら黒を置く
-        if turn%2==0 and one:
-            black_list.append([can_put_square[npc_put][0], can_put_square[npc_put][1]])
-            print(str(turn), "black", str([can_put_square[npc_put][0], can_put_square[npc_put][1]]))
-            npc_move = True
-
-        # 後手なら白を置く
-        elif turn%2==1 and two:
-            white_list.append([can_put_square[npc_put][0], can_put_square[npc_put][1]])
-            print(str(turn), "white", str([can_put_square[npc_put][0], can_put_square[npc_put][1]]))
-            npc_move = True
-
-        # 石をひっくり返す処理
-        hoges = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]]
-        is_my_stone = False
-        reverse_stone = []
-
-        # 敵の石の延長線上に、敵の石に接するように自分の石が置かれていればひっくり返る
-        for hoge in hoges:
-            check_square_num = 1
-            reverse_stone_cantidate = []
-
-            if turn%2==0 and [black_list[-1][0]+hoge[0], black_list[-1][1]+hoge[1]] in white_list:
-                reverse_stone_cantidate.append([black_list[-1][0]+hoge[0], black_list[-1][1]+hoge[1]])
-
-                for k in range(2, max(square_num_x, square_num_y)):
-                    check_square_num += 1
-
-                    if [black_list[-1][0]+hoge[0]*check_square_num, black_list[-1][1]+hoge[1]*check_square_num] in white_list:
-                        reverse_stone_cantidate.append([black_list[-1][0]+hoge[0]*check_square_num, black_list[-1][1]+hoge[1]*check_square_num])
-
-                    elif [black_list[-1][0]+hoge[0]*check_square_num, black_list[-1][1]+hoge[1]*check_square_num] in black_list:
-
-                        for cand in reverse_stone_cantidate:
-                            reverse_stone.append(cand)
-
-                        reverse_stone_cantidate = []
-                        break
-
-                    else:
-                        reverse_stone_cantidate = []
-                        break
-            
-            if turn%2==1 and [white_list[-1][0]+hoge[0], white_list[-1][1]+hoge[1]] in black_list:
-                reverse_stone_cantidate.append([white_list[-1][0]+hoge[0], white_list[-1][1]+hoge[1]])
-
-                for k in range(2, max(square_num_x, square_num_y)):
-                    check_square_num += 1
-
-                    if [white_list[-1][0]+hoge[0]*check_square_num, white_list[-1][1]+hoge[1]*check_square_num] in black_list:
-                        reverse_stone_cantidate.append([white_list[-1][0]+hoge[0]*check_square_num, white_list[-1][1]+hoge[1]*check_square_num])
-
-                    elif [white_list[-1][0]+hoge[0]*check_square_num, white_list[-1][1]+hoge[1]*check_square_num] in white_list:
-
-                        for cand in reverse_stone_cantidate:
-                            reverse_stone.append(cand)
-
-                        reverse_stone_cantidate = []
-                        break
-                        
-                    else:
-                        reverse_stone_cantidate = []
-                        break
-        
-        for rev in reverse_stone:
+            # 先手なら黒を置く
             if turn%2==0:
-                white_list.remove(rev)
-                black_list.append(rev)
-            if turn%2==1:
-                black_list.remove(rev)
-                white_list.append(rev)
-        reverse_stone = []
+                black_list.append([can_put_square[npc_put][0], can_put_square[npc_put][1]])
+                print(str(turn), "black", str([can_put_square[npc_put][0], can_put_square[npc_put][1]]))
 
-        if turn%2==0:
-            black_skip = False
-        else:
-            white_skip = False
-        if npc_move:
+            # 後手なら白を置く
+            elif turn%2==1:
+                white_list.append([can_put_square[npc_put][0], can_put_square[npc_put][1]])
+                print(str(turn), "white", str([can_put_square[npc_put][0], can_put_square[npc_put][1]]))
+
+            # 石をひっくり返す処理
+            hoges = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]]
+            is_my_stone = False
+            reverse_stone = []
+
+            # 敵の石の延長線上に、敵の石に接するように自分の石が置かれていればひっくり返る
+            for hoge in hoges:
+                check_square_num = 1
+                reverse_stone_cantidate = []
+
+                if turn%2==0 and [black_list[-1][0]+hoge[0], black_list[-1][1]+hoge[1]] in white_list:
+                    reverse_stone_cantidate.append([black_list[-1][0]+hoge[0], black_list[-1][1]+hoge[1]])
+
+                    for k in range(2, max(square_num_x, square_num_y)):
+                        check_square_num += 1
+
+                        if [black_list[-1][0]+hoge[0]*check_square_num, black_list[-1][1]+hoge[1]*check_square_num] in white_list:
+                            reverse_stone_cantidate.append([black_list[-1][0]+hoge[0]*check_square_num, black_list[-1][1]+hoge[1]*check_square_num])
+
+                        elif [black_list[-1][0]+hoge[0]*check_square_num, black_list[-1][1]+hoge[1]*check_square_num] in black_list:
+
+                            for cand in reverse_stone_cantidate:
+                                reverse_stone.append(cand)
+
+                            reverse_stone_cantidate = []
+                            break
+
+                        else:
+                            reverse_stone_cantidate = []
+                            break
+                
+                if turn%2==1 and [white_list[-1][0]+hoge[0], white_list[-1][1]+hoge[1]] in black_list:
+                    reverse_stone_cantidate.append([white_list[-1][0]+hoge[0], white_list[-1][1]+hoge[1]])
+
+                    for k in range(2, max(square_num_x, square_num_y)):
+                        check_square_num += 1
+
+                        if [white_list[-1][0]+hoge[0]*check_square_num, white_list[-1][1]+hoge[1]*check_square_num] in black_list:
+                            reverse_stone_cantidate.append([white_list[-1][0]+hoge[0]*check_square_num, white_list[-1][1]+hoge[1]*check_square_num])
+
+                        elif [white_list[-1][0]+hoge[0]*check_square_num, white_list[-1][1]+hoge[1]*check_square_num] in white_list:
+
+                            for cand in reverse_stone_cantidate:
+                                reverse_stone.append(cand)
+
+                            reverse_stone_cantidate = []
+                            break
+                            
+                        else:
+                            reverse_stone_cantidate = []
+                            break
+            
+            for rev in reverse_stone:
+                if turn%2==0:
+                    white_list.remove(rev)
+                    black_list.append(rev)
+                if turn%2==1:
+                    black_list.remove(rev)
+                    white_list.append(rev)
+            reverse_stone = []
+
+            if turn%2==0:
+                black_skip = False
+            else:
+                white_skip = False
+
             turn += 1
-            npc_move = False
 
     # 打つ手が無い時のスキップ処理
     if len(can_put_square) == 0:
@@ -341,36 +334,6 @@ while True:
                 else:
                     white_skip = False
                 turn += 1
-                    
-            ### 画面描画
-            surface.fill((0,0,0))
-            surface.blit(text, (0,0))
-
-            # 長方形（盤面）
-            pygame.draw.rect(surface, colors[0], (board_x, board_y, square_num_x*square_size, square_num_y*square_size))
-
-            for cans in can_put_square:
-                # 長方形（石を置けるマス）
-                pygame.draw.rect(surface, colors[1], (board_x + cans[0]*square_size, board_y + cans[1]*square_size, square_size, square_size))
-
-            for i in range(1, square_num_x):
-                # 線（マス区切り線：縦）
-                pygame.draw.line(surface, black, (board_x + square_size*i, board_y), (board_x + square_size*i, board_y + square_num_y*square_size), 3)
-
-            for i in range(1, square_num_y):
-                # 線（マス区切り線：横）
-                pygame.draw.line(surface, black, (board_x, board_y + square_size*i), (board_x + square_num_x*square_size, board_y + square_size*i), 3)
-
-            for bla in black_list:
-                # 円（黒の石）
-                pygame.draw.circle(surface, black, (board_x + (bla[0]+1/2)*square_size, board_y + (bla[1]+1/2)*square_size), R_SIZE, 0)
-
-            for whi in white_list:
-                # 円（白の石）
-                pygame.draw.circle(surface, black, (board_x + (whi[0]+1/2)*square_size, board_y + (whi[1]+1/2)*square_size), R_SIZE, 3)
-
-            pygame.display.update()
-            pygame.time.wait(500)
 
         # キーが押されたら
         if event.type == KEYDOWN:
