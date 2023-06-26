@@ -221,7 +221,7 @@ while True:
                 turn += 1
 
     # 条件を満たす決着まで自動対戦続行
-    if black_skip and white_skip and not (len(black_list)>63) and not (len(white_list)>63):
+    if black_skip and white_skip and not (len(black_list)<1) and not (len(white_list)<1):
         black_list = [[3, 4], [4, 3]]
         white_list = [[3, 3], [4, 4]]
 
