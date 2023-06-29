@@ -43,3 +43,17 @@ import random
 #     print("huga", h)
 #     huga.append(h+5)
 # print(huga)
+
+# 配列の要素を奇数と偶数に分ける処理
+def calc(numbers):
+    odd, even = [], []
+    for number in numbers:
+        if number % 2 == 0:
+            even.append(number)
+        else:
+            odd.append(number)
+    return even, odd
+
+a, b = calc([1,2,3,4,5])
+
+print(b)
