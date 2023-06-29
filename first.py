@@ -44,16 +44,23 @@ import random
 #     huga.append(h+5)
 # print(huga)
 
-# 配列の要素を奇数と偶数に分ける処理
-def calc(numbers):
-    odd, even = [], []
-    for number in numbers:
-        if number % 2 == 0:
-            even.append(number)
-        else:
-            odd.append(number)
-    return even, odd
+# # 配列の要素を奇数と偶数に分ける処理
+# def calc(numbers):
+#     odd, even = [], []
+#     for number in numbers:
+#         if number % 2 == 0:
+#             even.append(number)
+#         else:
+#             odd.append(number)
+#     return even, odd
 
-a, b = calc([1,2,3,4,5])
+# a, b = calc([1,2,3,4,5])
 
-print(b)
+# print(b)
+
+def speak(message):
+    print(message)
+    return message
+
+hoge = speak("こんにちは")
+print(hoge)
