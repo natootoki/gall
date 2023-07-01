@@ -2,5 +2,6 @@
 
 mdの練習
 
--[ ]マークアップ  
--[x]マークダウン
+```Hello
+print("Hello world!")
+```
