@@ -58,9 +58,10 @@ import random
 
 # print(b)
 
-def speak(message):
-    print(message)
-    return message
+# # メッセージを表示してメッセージを返す関数
+# def speak(message):
+#     print(message)
+#     return message
 
-hoge = speak("こんにちは")
-print(hoge)
+# hoge = speak("こんにちは")
+# print(hoge)

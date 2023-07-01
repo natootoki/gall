@@ -1,11 +1,11 @@
-### インポート
+# インポート
 import sys
 import pygame
 from pygame.locals import *
 
 import random
  
-### 定数
+# 定数
 WIDE   = 800  # 画面横サイズ
 HIGHT  = 600  # 画面縦サイズ
 R_SIZE = 20   # 円半径
@@ -26,11 +26,11 @@ white = (255, 255, 255)
 # 赤橙黄緑青藍紫
 colors = [(255, 0, 0), (255, 165, 0), (255, 241, 0), (0, 128, 0), (30, 144, 255), (15, 84, 116), (192, 48, 192)]
 
-### 画面初期化
+# 画面初期化
 pygame.init()
 surface = pygame.display.set_mode((WIDE, HIGHT))
  
-### 変数初期化
+# 変数初期化
 x = WIDE/2    # 横座標
 y = HIGHT/2   # 縦座標
 
@@ -50,13 +50,13 @@ white_player = False
 
 stan = 0
 
-### マウスカーソル表示
+# マウスカーソル表示
 pygame.mouse.set_visible(True)
  
-### マウスカーソル初期位置
+# マウスカーソル初期位置
 pygame.mouse.set_pos((x, y))
  
-### 無限ループ
+# 無限ループ
 while True:
 
     # 石を置ける場所を洗い出す処理
@@ -112,8 +112,11 @@ while True:
 
     # NPCを動かす処理
     stan = max (0, stan-1)
+
     if stan == 0:
+
         if (not black_player and turn%2==0) or (not white_player and turn%2==1):
+
             if len(can_put_square)>0:
                 npc_put = random.randrange(len(can_put_square))
 
@@ -207,6 +210,7 @@ while True:
                 if turn%2==0:
                     print(str(turn), "black skip")
                     black_skip = True
+
                     if black_skip and white_skip:
                         print("black ", str(len(black_list)))
                         print("white ", str(len(white_list))) 
@@ -214,6 +218,7 @@ while True:
                 else:
                     print(str(turn), "white skip")
                     white_skip = True
+                    
                     if black_skip and white_skip:
                         print("black ", str(len(black_list)))
                         print("white ", str(len(white_list))) 
