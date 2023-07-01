@@ -6,4 +6,4 @@ mdの練習
 print("Hello world!")
 ```
 
-./first.py
+[test](./first.py)
