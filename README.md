@@ -1,8 +1,10 @@
 # README
+## README
+### README
 
 mdの練習
 
-```Hello
+```
 print("Hello world!")
 ```
 
@@ -19,3 +21,4 @@ print("Hello world!")
 - [x] 迷路
 - [x] オセロ
 - [ ] テトリス
+
