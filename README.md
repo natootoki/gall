@@ -36,3 +36,4 @@ print("Hello world!")
 - [ ] bombs and coins復興
 - [ ] シューティングゲーム
 - [ ] アクションゲーム
+- [ ] whiteboard
