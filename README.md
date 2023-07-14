@@ -37,3 +37,4 @@ print("Hello world!")
 - [ ] シューティングゲーム
 - [ ] アクションゲーム
 - [ ] whiteboard
+- [ ] 将棋
