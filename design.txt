@@ -1,1 +1,11 @@
 # オセロ
+
+square_size : 1マスの一辺の長さ
+square_num_x : 横に何マス並んでいるか
+square_num_y : 縦に何マス並んでいるか
+
+board_x : 盤面の左上のx座標
+board_y : 盤面の左上のy座標
+
+x : カーソルのx座標
+y : カーソルのy座標
