@@ -9,3 +9,20 @@ board_y : 盤面の左上のy座標
 
 x : カーソルのx座標
 y : カーソルのy座標
+
+target_square_num_x : 今カーソルが当たっているマスがx方向で何番目か
+target_square_num_y : 今カーソルが当たっているマスがy方向で何番目か
+
+black_list : 黒石が置かれているマスのリスト
+white_list : 白石が置かれているマスのリスト
+
+turn : 今が何ターン目か
+
+black_skip : 直前のターン黒がSKIPされたかどうか
+white_skip : 直前のターン白がSKIPされたかどうか
+
+black_player : 黒の番でNPCが動くかどうか
+white_player : 白の番でNPCが動くかどうか
+
+stan : 石を置いたときに操作不能の待ち時間を発生させるフレーム数
+
